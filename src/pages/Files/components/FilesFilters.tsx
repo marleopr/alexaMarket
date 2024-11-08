@@ -16,6 +16,7 @@ const FilesFilters = ({
   setSearchFree,
   searchDate,
   setSearchDate,
+  t,
 }) => {
   const [status, setStatus] = React.useState("");
 

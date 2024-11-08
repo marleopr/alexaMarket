@@ -1,6 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
 import { appStore } from "../../../store/ApplicationStore";
-//import TI9Logo from "../../../assets/logo-ti9-white.png";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const HeaderLeftContent = () => {
@@ -23,7 +22,7 @@ const HeaderLeftContent = () => {
           fontWeight: 700,
         }}
       >
-        AlexaMarket
+        $ave
       </Typography>
       <Button onClick={() => toggleMenu()}>
         <MenuIcon />

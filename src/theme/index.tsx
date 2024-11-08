@@ -1,6 +1,12 @@
 import { createTheme } from "@mui/material/styles";
 import { ptBR } from "@mui/material/locale";
 
+export const colors = {
+  green: {
+    main: "rgb(0, 150, 136)",
+  },
+};
+
 export const theme = createTheme(
   {
     components: {
@@ -12,7 +18,7 @@ export const theme = createTheme(
           contained: {
             boxShadow: "none",
             backgroundColor: "rgb(224, 242, 241)",
-            color: "rgb(0, 150, 136)",
+            color: colors.green.main,
             "&:hover": {
               boxShadow: "none",
             },
@@ -21,11 +27,11 @@ export const theme = createTheme(
             color: "rgb(54, 65, 82)",
             "&:hover": {
               backgroundColor: "rgb(224, 242, 241)",
-              color: "rgb(0, 150, 136)",
+              color: colors.green.main,
             },
           },
           outlined: {
-            color: "rgb(0, 150, 136)",
+            color: colors.green.main,
             borderColor: "rgb(224, 242, 241)",
             "&:hover": {
               backgroundColor: "rgb(224, 242, 241)",

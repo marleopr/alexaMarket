@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { colors } from "../../theme";
 
 const LoadingScreenContainer = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const CircleLoader = styled.div`
   height: 50px;
   border-radius: 50%;
   border: 4px solid white;
-  border-top-color: red;
+  border-top-color: ${colors.green.main};
   animation: ${spinAnimation} 1s linear infinite;
 `;
 

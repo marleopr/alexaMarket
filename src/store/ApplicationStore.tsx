@@ -1,21 +1,32 @@
 import { create } from "zustand";
 import { LoggedUser } from "../types/logged-user";
+import {
+  getMarketplacesService,
+  MarketPlacesType,
+} from "../services/marketplaces/get-market-places";
 
 type Store = {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+
   menuIsOpen: string;
+
   toggleMenu: () => void;
+
   applicationLoading: boolean;
   setApplicationLoading: (applicationLoading: boolean) => void;
-  isAdmin: boolean;
-  setAdmin: (isAdmin: boolean) => void;
+
   loggedUser: LoggedUser;
   setLoggedUser: (loggedUser: LoggedUser) => void;
+
+  //Marketplaces List
+  marketplaceList: MarketPlacesType[];
+  getMarketplaces: () => void;
+  marketplaceListLoading: boolean;
 };
 
 export const appStore = create<Store>()((set, get) => ({
-  isAuthenticated: true,
+  isAuthenticated: false,
   setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
 
   menuIsOpen: "true",
@@ -27,19 +38,36 @@ export const appStore = create<Store>()((set, get) => ({
   setApplicationLoading: (applicationLoading: boolean) =>
     set({ applicationLoading }),
 
-  isAdmin: false,
-  setAdmin: (isAdmin: boolean) => set({ isAdmin }),
-
   loggedUser: {
-    id: "",
-    username: "",
-    name: "",
+    globalAccountKey: "",
+    productKey: "",
+    account: "",
+    userAccountID: "",
     email: "",
+    active: false,
+    name: "",
+    phone: "",
+    celPhone: "",
+    mainUser: false,
     roles: [],
-    groupsIds: [],
   },
+
   setLoggedUser: (loggedUser: LoggedUser) => {
     set({ loggedUser });
-    set({ isAdmin: loggedUser.roles.includes("ADMIN") });
+  },
+
+  marketplaceListLoading: true,
+  marketplaceList: [],
+  getMarketplaces: async () => {
+    set({ marketplaceListLoading: true });
+    const response = await getMarketplacesService();
+
+    if (response.code === "error") {
+      set({ marketplaceListLoading: false });
+      console.error("Error fetching marketplaces");
+      return;
+    }
+    console.log('marketplaces opts -> ', response.data.data);
+    set({ marketplaceList: response.data.data, marketplaceListLoading: false });
   },
 }));

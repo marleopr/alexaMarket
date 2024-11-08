@@ -2,31 +2,22 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import CommentIcon from "@mui/icons-material/Comment";
 import { colors } from "../../../theme";
-import enFlag from "../../../assets/enFlag.png";
-import ptFlag from "../../../assets/ptFlag.png";
-import esFlag from "../../../assets/esFlag.png";
-import CheckIcon from "@mui/icons-material/Check";
+import { NotificationImportant } from "@mui/icons-material";
 
 const settings = [
   {
-    label: <img src={enFlag} alt="English" width="32" height="32" />,
+    label: "English",
     value: "en",
   },
-  {
-    label: <img src={ptFlag} alt="Português" width="32" height="32" />,
-    value: "pt",
-  },
-  {
-    label: <img src={esFlag} alt="Español" width="32" height="32" />,
-    value: "es",
-  },
+  { label: "Português", value: "pt" },
+  { label: "Español", value: "es" },
 ];
 
-function LanguageIcon() {
+function NotificationIcon() {
   const {
     i18n: { changeLanguage, language },
   } = useTranslation();
@@ -52,7 +43,7 @@ function LanguageIcon() {
   return (
     <Box sx={{ flexGrow: 0 }}>
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        <CommentIcon />
+        <NotificationImportant />
       </IconButton>
       <Menu
         sx={{ mt: "45px" }}
@@ -72,31 +63,24 @@ function LanguageIcon() {
       >
         {settings.map((setting) => (
           <MenuItem
-            key={setting.value}
+            key={setting.label}
             onClick={() => handleChangeLanguage(setting.value)}
-            sx={{
-              backgroundColor:
-                currentLanguage === setting.value
-                  ? colors.green.light
-                  : "inherit",
-              border:
-                currentLanguage === setting.value
-                  ? `2px solid ${colors.green.main}`
-                  : "none",
-              borderRadius: 1,
-            }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography
+              sx={{
+                textAlign: "center",
+                color:
+                  currentLanguage === setting.value
+                    ? colors.green.main
+                    : "text.primary",
+              }}
+            >
               {setting.label}
-              {currentLanguage === setting.value && (
-                <CheckIcon sx={{ ml: 1, color: colors.green.main }} />
-              )}
-            </Box>
+            </Typography>
           </MenuItem>
         ))}
       </Menu>
     </Box>
   );
 }
-
-export default LanguageIcon;
+export default NotificationIcon;

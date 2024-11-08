@@ -1,0 +1,61 @@
+{
+  "translation": {
+    "DashboardMenu": "Panel",
+    "MarketplacesMenu": "Tiendas",
+    "OrdersMenu": "Pedidos",
+    "FilesMenu": "Archivos",
+    "Marketplaces": {
+      "FlatRate": "Tasa fija",
+      "MarginError": "Margen de error",
+      "DaysForPayment": "Días para pago",
+      "StartOfTerm": "Inicio del plazo",
+      "EndOfTerm": "Fin del plazo",
+      "CreateDate": "Fecha de creación",
+      "LastUpdate": "Última actualización"
+    },
+    "Orders": {
+      "Index": "Índice",
+      "ConciliationDate": "Fecha de Conciliación",
+      "SaleNote": "Nota de Venta",
+      "ReturnNote": "Nota de Devolución",
+      "InternalOrder": "Pedido Interno",
+      "MarketplaceOrder": "Pedido del Marketplace",
+      "OrderDate": "Fecha del Pedido",
+      "OrderStatus": "Estado del Pedido"
+    },
+    "Files": {
+      "DateUp": "Fecha de Actualización",
+      "DateProcessing": "Fecha de Procesamiento"
+    },
+    "Filters": {
+      "Apply": "Aplicar",
+      "OrderStart": "Inicio del Pedido",
+      "OrderEnd": "Fin del Pedido",
+      "Confirmed": "Confirmado",
+      "Cancelled": "Cancelado"
+    },
+    "Common": {
+      "Name": "Nombre",
+      "Actions": "Acciones",
+      "Marketplace": "Tienda",
+      "User": "Usuario",
+      "Type": "Tipo",
+      "Pagination": "Líneas por página",
+      "ClearFilters": "Limpiar filtros",
+      "Commission": "Comisión"
+    },
+    "AddNewRegister": {
+      "AddNewRegister": "Agregar nuevo registro",
+      "Dialog": "Por favor, rellene los datos para el nuevo registro."
+    },
+    "Buttons": {
+      "Cancel": "Cancelar",
+      "Add": "Agregar",
+      "Import": "Importar",
+      "Upload": "Subir",
+      "Apply": "Aplicar",
+      "Reset": "Restablecer",
+      "Download": "Descargar Archivo"
+    }
+  }
+}

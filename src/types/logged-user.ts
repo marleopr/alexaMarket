@@ -1,8 +1,12 @@
 export type LoggedUser = {
-  id: string;
-  username: string;
-  name: string;
+  globalAccountKey: string;
+  productKey: string;
+  account: string;
+  userAccountID: string;
   email: string;
-  roles: string[];
-  groupsIds: string[];
+  active: boolean;
+  name: string;
+  phone: string;
+  celPhone: string;
+  mainUser: boolean;
 };

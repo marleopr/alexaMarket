@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Container>
         <Sidebar />
         <MiddleColumn>
-          <Box maxWidth={{ xs: "350px", md: "1050px" }} margin="0 auto">
+          <Box maxWidth={{ xs: "350px", md: "100%" }} margin="0 auto">
             {children}
           </Box>
         </MiddleColumn>

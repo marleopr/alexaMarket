@@ -1,5 +1,61 @@
 {
   "translation": {
-    "Dashboard": "Dashboard em ingles"
+    "DashboardMenu": "Dashboard",
+    "MarketplacesMenu": "Store",
+    "OrdersMenu": "Orders",
+    "FilesMenu": "Files",
+    "Marketplaces": {
+      "FlatRate": "Flat rate",
+      "MarginError": "Margin of error",
+      "DaysForPayment": "Days for payment",
+      "StartOfTerm": "Start of term",
+      "EndOfTerm": "End of term",
+      "CreateDate": "Create date",
+      "LastUpdate": "Last update"
+    },
+    "Orders": {
+      "Index": "Index",
+      "ConciliationDate": "Conciliation Date",
+      "SaleNote": "Sale Note",
+      "ReturnNote": "Return Note",
+      "InternalOrder": "Internal Order",
+      "MarketplaceOrder": "Marketplace Order",
+      "OrderDate": "Order Date",
+      "OrderStatus": "Order Status"
+    },
+    "Files": {
+      "DateUp": "Date Up",
+      "DateProcessing": "Date Processing"
+    },
+    "Filters": {
+      "Apply": "Apply",
+      "OrderStart": "Order start",
+      "OrderEnd": "Order End",
+      "Confirmed": "Confirmed",
+      "Cancelled": "Cancelled"
+    },
+    "Common": {
+      "Name": "Name",
+      "Actions": "Actions",
+      "Marketplace": "Marketplace",
+      "User": "User",
+      "Type": "Type",
+      "Pagination": "Lines per page",
+      "ClearFilters": "Clear filters",
+      "Commission": "Commission"
+    },
+    "AddNewRegister": {
+      "AddNewRegister": "Add new register",
+      "Dialog": "Please fill in the details for the new register."
+    },
+    "Buttons": {
+      "Cancel": "Cancel",
+      "Add": "Add",
+      "Import": "Import",
+      "Upload": "Upload",
+      "Apply": "Apply",
+      "Reset": "Reset",
+      "Download": "Download File"
+    }
   }
 }

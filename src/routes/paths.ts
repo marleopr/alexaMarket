@@ -4,4 +4,6 @@ export const PATHS = {
   MARKETPLACES: `/marketplaces`,
   ORDERS: `/orders`,
   FILES: `/files`,
+  FORGOT_PASSWORD: `/forgot-password`,
+  RESET_PASSWORD: `/reset-password/*`,
 };

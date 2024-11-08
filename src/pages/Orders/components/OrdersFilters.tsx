@@ -7,8 +7,11 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const OrdersFilters = () => {
+  const { t } = useTranslation();
+
   const rows: any = [];
 
   const [status, setStatus] = useState("");
@@ -26,7 +29,7 @@ const OrdersFilters = () => {
     <Box display={"flex"} flexWrap={"wrap"} gap={2}>
       <TextField
         id="order-start"
-        label="Order start"
+        label={t("Filters.OrderStart")}
         type="date"
         InputLabelProps={{
           shrink: true,
@@ -34,7 +37,7 @@ const OrdersFilters = () => {
       />
       <TextField
         id="order-end"
-        label="Order end"
+        label={t("Filters.OrderEnd")}
         type="date"
         InputLabelProps={{
           shrink: true,
@@ -50,17 +53,17 @@ const OrdersFilters = () => {
           onChange={handleStatusChange}
         >
           <MenuItem value=""></MenuItem>
-          <MenuItem value="Confirmed">Confirmed</MenuItem>
-          <MenuItem value="Cancelled">Cancelled</MenuItem>
+          <MenuItem value="Confirmed">{t("Filters.Confirmed")}</MenuItem>
+          <MenuItem value="Cancelled">{t("Filters.Cancelled")}</MenuItem>
         </Select>
       </FormControl>
       <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="marketplace-label">Marketplace</InputLabel>
+        <InputLabel id="marketplace-label">{t("Common.Marketplace")}</InputLabel>
         <Select
           labelId="marketplace-label"
           id="marketplace"
           value={marketplace}
-          label="Marketplace"
+          label={t("Common.Marketplace")}
           onChange={handleMarketplaceChange}
         >
           <MenuItem value=""></MenuItem>

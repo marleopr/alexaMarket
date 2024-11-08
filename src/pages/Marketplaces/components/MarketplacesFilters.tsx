@@ -1,6 +1,6 @@
-import React from "react";
 import {
   Box,
+  Button,
   Collapse,
   FormControl,
   InputLabel,
@@ -8,69 +8,68 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { Add, Remove } from "@mui/icons-material";
+import { appStore } from "../../../store/ApplicationStore";
+import { MarketPlacesType } from "../../../services/marketplaces/get-market-places";
+import { useTranslation } from "react-i18next";
+import { storesStore } from "../StoresStore";
 
-const MarketplacesFilters = ({
-  rows,
-  marketplace,
-  setMarketplace,
-  searchFree,
-  setSearchFree,
-  searchCombo,
-  setSearchCombo,
-  showAdditionalFilters,
-  setShowAdditionalFilters,
-}) => {
-  const [status, setStatus] = React.useState("");
+const MarketplacesFilters = ({ showFilters }: { showFilters: boolean }) => {
+  const { marketplaceList } = appStore();
+  const { t } = useTranslation();
+  const { setPage, filters, setFilters } = storesStore();
 
-  const handleMarketplaceChange = (event: any) => {
-    setMarketplace(event.target.value as string);
-  };
+  const handleApplyFilters = () => setPage(0);
 
-  const handleStatusChange = (event: any) => {
-    setStatus(event.target.value as string);
+  const handleClearFilters = () => {
+    setFilters({ marketplace: "", searchValue: "" });
+    setPage(0);
   };
 
   return (
     <Box display="flex" flexWrap="wrap" gap={2}>
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="marketplace-label">Marketplace</InputLabel>
-        <Select
-          labelId="marketplace-label"
-          id="marketplace"
-          value={marketplace}
-          label="Marketplace"
-          onChange={handleMarketplaceChange}
-        >
-          <MenuItem value=""></MenuItem>
-          {rows
-            .filter((row: any) => row.marketplace)
-            .map((row: any) => (
-              <MenuItem key={row.index} value={row.marketplace}>
-                {row.marketplace}
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ minWidth: 200 }}>
-        <TextField
-          label="Name"
-          variant="outlined"
-          value={searchFree}
-          onChange={(e) => setSearchFree(e.target.value)}
-          sx={{ minWidth: 200 }}
-        />
-      </FormControl>
-      <Collapse in={showAdditionalFilters} timeout="auto" unmountOnExit>
-        <FormControl sx={{ minWidth: 200 }}>
-          <TextField
-            label="Combo"
-            variant="outlined"
-            value={searchCombo}
-            onChange={(e) => setSearchCombo(e.target.value)}
-            sx={{ minWidth: 200 }}
-          />
-        </FormControl>
+      <Collapse in={showFilters} timeout="auto" unmountOnExit>
+        <Box display="flex" flexWrap="wrap" gap={2}>
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="marketplace-label">
+              {t("Common.Marketplace")}
+            </InputLabel>
+            <Select
+              labelId="marketplace-label"
+              id="marketplace"
+              value={filters.marketplace}
+              label={t("Common.Marketplace")}
+              onChange={(e) =>
+                setFilters({
+                  ...filters,
+                  marketplace: e.target.value as number,
+                })
+              }
+            >
+              {marketplaceList.map((row: MarketPlacesType) => (
+                <MenuItem key={row.Codigo} value={row.Codigo}>
+                  {row.Nome}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 200 }}>
+            <TextField
+              label={t("Common.Name")}
+              variant="outlined"
+              value={filters.searchValue}
+              onChange={(e) =>
+                setFilters({ ...filters, searchValue: e.target.value })
+              }
+              sx={{ minWidth: 200 }}
+            />
+          </FormControl>
+          <Button variant="contained" onClick={handleApplyFilters}>
+            {t("Apply")}
+          </Button>
+          <Button variant="text" onClick={handleClearFilters}>
+            {t("Common.ClearFilters")}
+          </Button>
+        </Box>
       </Collapse>
     </Box>
   );

@@ -8,37 +8,27 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormLabel,
   TextField,
   Typography,
 } from "@mui/material";
-import { loginService } from "../../services/login/login-service";
-import { getUserInfoService } from "../../services/user/get-user-info-service";
-import {
-  saveRefreshTokenInLocalStorage,
-  saveTokenInLocalStorage,
-  saveUserIdInLocalStorage,
-} from "../../utils/local-storage-helper";
 
-const LoginPage: FC = () => {
+import { recoverPasswordService } from "../../services/login/recover-password-service";
+
+const ForgotPasswordPage: FC = () => {
   const notifications = useNotifications();
 
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
-  const { isAuthenticated, setIsAuthenticated, setLoggedUser } = appStore();
+  const { isAuthenticated } = appStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate(PATHS.DASHBOARD);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -49,37 +39,23 @@ const LoginPage: FC = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const res = await loginService({
+      const res = await recoverPasswordService({
         login: data.get("email") as string,
-        password: data.get("password") as string,
-        account: data.get("email") as string,
+        recoveryAddress: data.get("account") as string,
       });
 
       if (res.code === "error") {
-        return notifications.show("Usuário ou senha inválidos", {
-          severity: "error",
-          autoHideDuration: 3000,
-        });
+        return;
       }
 
-      saveUserIdInLocalStorage(res.data.id);
-      saveRefreshTokenInLocalStorage(res.data.refreshToken);
-      saveTokenInLocalStorage(res.data.accessToken);
+      notifications.show(res.data.message, {
+        severity: "info",
+        autoHideDuration: 3000,
+      });
 
-      const loggedUserInfo = await getUserInfoService({ id: res.data.id });
-
-      if (loggedUserInfo.code === "error") {
-        return notifications.show("Erro ao buscar informações do usuário", {
-          severity: "error",
-          autoHideDuration: 3000,
-        });
-      }
-
-      setLoggedUser(loggedUserInfo.data);
-      setIsAuthenticated(true);
-      navigate(PATHS.DASHBOARD);
+      navigate(PATHS.LOGIN);
     } catch (error) {
-      notifications.show("Erro ao realizar login", {
+      notifications.show("Erro, contate um administrador", {
         severity: "error",
         autoHideDuration: 3000,
       });
@@ -89,7 +65,6 @@ const LoginPage: FC = () => {
 
   const validateInputs = () => {
     const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
 
     let isValid = true;
 
@@ -100,15 +75,6 @@ const LoginPage: FC = () => {
     } else {
       setEmailError(false);
       setEmailErrorMessage("");
-    }
-
-    if (!password.value) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Insira uma senha");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
     }
 
     return isValid;
@@ -131,10 +97,20 @@ const LoginPage: FC = () => {
             $ave
           </Typography>
           <Typography
+            variant="h5"
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              mb: 3,
+            }}
+          >
+            Esqueceu a senha?
+          </Typography>
+          <Typography
             variant="body1"
             sx={{ textAlign: "center", mb: 2, color: "gray" }}
           >
-            Por favor, entre com seus dados
+            Informe suas credenciais e enviaremos um link de recadastro
           </Typography>
           <Box
             component="form"
@@ -147,7 +123,7 @@ const LoginPage: FC = () => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">E-mail</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
@@ -163,26 +139,6 @@ const LoginPage: FC = () => {
                 color={emailError ? "error" : "primary"}
               />
             </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Senha</FormLabel>
-              <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                required
-                fullWidth
-                variant="outlined"
-                color={passwordError ? "error" : "primary"}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Lembrar me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -190,10 +146,10 @@ const LoginPage: FC = () => {
               size="large"
               onClick={validateInputs}
             >
-              Entrar
+              Enviar e-mail
             </Button>
             <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
-              <Link to={PATHS.FORGOT_PASSWORD}>Esqueceu a senha?</Link>
+              <Link to={PATHS.LOGIN}>Já possui uma conta ?</Link>
             </Box>
           </Box>
         </Card>
@@ -202,7 +158,7 @@ const LoginPage: FC = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPasswordPage;
 
 const Wrapper = styled.div`
   display: flex;

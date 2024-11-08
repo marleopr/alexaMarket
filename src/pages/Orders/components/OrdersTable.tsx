@@ -1,4 +1,3 @@
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,10 +8,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button } from "@mui/material";
 import {
   AppRegistration,
@@ -27,88 +22,11 @@ import DeleteConfirmationModal from "../../../components/DeleteConfirmationModal
 import TooltipComponent from "../../../components/TooltipComponent";
 import { useState } from "react";
 import OrdersFilters from "./OrdersFilters";
-
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
-
-function TablePaginationActions(props: Readonly<TablePaginationActionsProps>) {
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
-
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </Box>
-  );
-}
+import { useTranslation } from "react-i18next";
+import PaginationControls from "../../../components/PaginationControls";
 
 export default function OrdersTable() {
+  const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchFree] = useState("");
@@ -157,7 +75,7 @@ export default function OrdersTable() {
             color="primary"
             onClick={() => {}}
           >
-            Choose file to import
+            {t("Buttons.Import")}
           </Button>
           <Button
             endIcon={<ArrowUpward />}
@@ -165,7 +83,7 @@ export default function OrdersTable() {
             color="primary"
             onClick={() => {}}
           >
-            Upload
+            {t("Buttons.Upload")}
           </Button>
           <Button
             endIcon={<AppRegistration />}
@@ -173,7 +91,7 @@ export default function OrdersTable() {
             color="primary"
             onClick={() => {}}
           >
-            Apply
+            {t("Buttons.Apply")}
           </Button>
           <Button
             endIcon={<Restore />}
@@ -181,7 +99,7 @@ export default function OrdersTable() {
             color="primary"
             onClick={() => {}}
           >
-            Reset
+            {t("Buttons.Reset")}
           </Button>
           <Button
             endIcon={<Download />}
@@ -189,16 +107,10 @@ export default function OrdersTable() {
             color="primary"
             onClick={() => {}}
           >
-            Download File
+            {t("Buttons.Download")}
           </Button>
         </Box>
       </Box>
-
-      {/* <NewRegisterModal
-          open={open}
-          onClose={handleClose}
-          onAddRegister={handleAddRegister}
-        /> */}
 
       <DeleteConfirmationModal
         open={openDeleteModal}
@@ -210,17 +122,17 @@ export default function OrdersTable() {
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableBody>
             <TableRow>
-              <TableCell>INDEX</TableCell>
-              <TableCell>CONCILIATION DATE</TableCell>
-              <TableCell>USER</TableCell>
-              <TableCell>SALE NOTE</TableCell>
-              <TableCell>RETURN NOTE</TableCell>
-              <TableCell>INTERNAL ORDER</TableCell>
-              <TableCell>MARKETPLACE ORDER</TableCell>
-              <TableCell>ORDER DATE</TableCell>
-              <TableCell>ORDER STATUS</TableCell>
-              <TableCell>MARKETPLACE</TableCell>
-              <TableCell>AÇÕES</TableCell>
+              <TableCell>{t("Orders.Index")}</TableCell>
+              <TableCell>{t("Orders.ConciliationDate")}</TableCell>
+              <TableCell>{t("Common.User")}</TableCell>
+              <TableCell>{t("Orders.SaleNote")}</TableCell>
+              <TableCell>{t("Orders.ReturnNote")}</TableCell>
+              <TableCell>{t("Orders.InternalOrder")}</TableCell>
+              <TableCell>{t("Orders.MarketplaceOrder")}</TableCell>
+              <TableCell>{t("Orders.OrderDate")}</TableCell>
+              <TableCell>{t("Orders.OrderStatus")}</TableCell>
+              <TableCell>{t("Common.Marketplace")}</TableCell>
+              <TableCell>{t("Common.Actions")}</TableCell>
             </TableRow>
 
             {(rowsPerPage > 0
@@ -269,7 +181,14 @@ export default function OrdersTable() {
                 page={page}
                 onPageChange={(_, page) => handleChangePage(page)}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
+                sx={{ overflow: "hidden" }}
+                labelRowsPerPage={t("Common.Pagination")}
+                ActionsComponent={(props) => (
+                  <PaginationControls
+                    {...props}
+                    onPageChange={props.onPageChange}
+                  />
+                )}
               />
             </TableRow>
           </TableFooter>
