@@ -8,7 +8,7 @@ export interface StoreType {
   MKTP_VLR_PERCEN: number;
   MKTP_DAT_INIVIG: string; // ISO date string
   MKTP_DAT_FIMVIG: string; // ISO date string
-  MKTP_VAL_FLT_RAT: number;
+  MKTP_VAL_FLTRAT: number;
   MKTP_VAL_MAR: number;
   MKTP_DAT_CRE: string; // ISO date string
   MKTP_DAT_UPD: string; // ISO date string
@@ -23,7 +23,7 @@ interface GetStoresRequest {
     | "MKTP_COD_MKT"
     | "MKTP_NOM_NAM"
     | "MKTP_VLR_PERCEN"
-    | "MKTP_VAL_FLT_RAT"
+    | "MKTP_VAL_FLTRAT"
     | "MKTP_DAT_INIVIG"
     | "MKTP_DAT_FIMVIG"
     | "MKTP_VAL_MAR"
@@ -44,7 +44,10 @@ type Param<T, V, W> = {
 };
 
 interface GetStoreServiceResponse {
-  data: StoreType[];
+  data: {
+    records: StoreType[];
+    count: number;
+  };
 }
 export const getStoresService = requestHandler<
   GetStoresRequest,

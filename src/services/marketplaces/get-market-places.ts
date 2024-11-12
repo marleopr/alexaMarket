@@ -7,7 +7,7 @@ export interface MarketPlacesType {
 }
 
 interface GetMarketplacesResponse {
-  data: MarketPlacesType[];
+  data: { records: MarketPlacesType[] };
 }
 
 export const getMarketplacesService = requestHandler<

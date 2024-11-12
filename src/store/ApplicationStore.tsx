@@ -68,6 +68,6 @@ export const appStore = create<Store>()((set, get) => ({
       return;
     }
     console.log('marketplaces opts -> ', response.data.data);
-    set({ marketplaceList: response.data.data, marketplaceListLoading: false });
+    set({ marketplaceList: response.data.data.records, marketplaceListLoading: false });
   },
 }));

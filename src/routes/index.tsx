@@ -9,7 +9,7 @@ import { PATHS } from "./paths";
 import LoginPage from "../pages/LoginPage";
 import React from "react";
 import Dashboard from "../pages/Dashboard";
-import Marketplaces from "../pages/Marketplaces";
+import Stores from "../pages/Stores";
 import Orders from "../pages/Orders";
 import Files from "../pages/Files";
 import Layout from "../components/Layout";
@@ -36,9 +36,9 @@ export const routesToAppearInSidebar = [
     icon: <DashboardCustomize />,
   },
   {
-    path: PATHS.MARKETPLACES,
-    element: <RouteWithMenu element={<Marketplaces />} />,
-    label: "MarketplacesMenu",
+    path: PATHS.STORES,
+    element: <RouteWithMenu element={<Stores />} />,
+    label: "StoresMenu",
     icon: <Store />,
   },
   {

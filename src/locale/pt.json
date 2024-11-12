@@ -1,7 +1,7 @@
 {
   "translation": {
     "DashboardMenu": "Visão geral",
-    "MarketplacesMenu": "Lojas",
+    "StoresMenu": "Lojas",
     "OrdersMenu": "Pedidos",
     "FilesMenu": "Arquivos",
     "Marketplaces": {
@@ -42,7 +42,8 @@
       "Type": "Tipo",
       "Pagination": "Linhas por página",
       "ClearFilters": "Limpar filtros",
-      "Commission": "Comissão"
+      "Commission": "Comissão",
+      "Required": "Required"
     },
     "AddNewRegister": {
       "AddNewRegister": "Adicionar novo registro",
@@ -56,6 +57,10 @@
       "Apply": "Aplicar",
       "Reset": "Redefinir",
       "Download": "Baixar Arquivo"
+    },
+    "Notifications": {
+      "StoreNotCreated": "Error creating store",
+      "StoreCreated": "Store created!"
     }
   }
 }

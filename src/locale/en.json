@@ -1,7 +1,7 @@
 {
   "translation": {
     "DashboardMenu": "Dashboard",
-    "MarketplacesMenu": "Store",
+    "StoresMenu": "Stores",
     "OrdersMenu": "Orders",
     "FilesMenu": "Files",
     "Marketplaces": {
@@ -38,11 +38,13 @@
       "Name": "Name",
       "Actions": "Actions",
       "Marketplace": "Marketplace",
+      "Store": "Store",
       "User": "User",
       "Type": "Type",
       "Pagination": "Lines per page",
       "ClearFilters": "Clear filters",
-      "Commission": "Commission"
+      "Commission": "Commission",
+      "Required": "Required"
     },
     "AddNewRegister": {
       "AddNewRegister": "Add new register",
@@ -56,6 +58,11 @@
       "Apply": "Apply",
       "Reset": "Reset",
       "Download": "Download File"
+    },
+    "Notifications": {
+      "StoreNotCreated": "Error creating store",
+      "StoreCreated": "Store created!",
+      "StoreUpdated": "Store updated!"
     }
   }
 }
