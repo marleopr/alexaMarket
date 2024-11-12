@@ -19,7 +19,10 @@ import { storesStore } from "../StoresStore";
 import { formatTableDate } from "../../../utils/format-table-date";
 import EditStoreModal from "./EditStoreModal";
 import { StoreType } from "../../../services/store/get-stores";
-import { deleteStoreService } from "../../../services/store/delete-stores";
+import {
+  DeleteStorePayload,
+  deleteStoreService,
+} from "../../../services/store/delete-stores";
 
 export default function StoresTable() {
   const { t } = useTranslation();
@@ -39,8 +42,10 @@ export default function StoresTable() {
     storeData: null,
   });
 
-  const [tableRows, setTableRows] = useState<RowType[]>([]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedRowName, setSelectedRowName] = useState<string | null>(null);
+  const [storePercentage, setStorePercentage] = useState<number | null>(null);
+  const [storeDayPay, setStoreDayPay] = useState<number>(0);
 
   const handleRequestSort = (property: keyof RowType) => {
     const isAsc = orderBy === property && orderDirection === "asc";
@@ -48,42 +53,75 @@ export default function StoresTable() {
     setOrderBy(property);
   };
 
-  // const handleConfirmDelete = () => {
-  //   console.log("Registro deletado");
-  //   setOpenDeleteModal(false);
-  // };
+  const handleRowSelect = (rowId: number, rowName: string) => {
+    setSelectedRow(rowId);
+    setSelectedRowName(rowName);
+  };
 
-  const handleConfirmDelete = async (storeId: number | null) => {
-    if (typeof storeId === "number") {
+  const openDeleteConfirmation = (
+    rowId: number,
+    rowName: string,
+    percentage: number,
+    dayPay: number
+  ) => {
+    setSelectedRow(rowId);
+    setSelectedRowName(rowName);
+    setStorePercentage(percentage);
+    setStoreDayPay(dayPay);
+    setOpenDeleteModal(true);
+  };
+
+  const handleDelete = async (storeData: DeleteStorePayload) => {
+    const response = await deleteStoreService(storeData);
+
+    if (response) {
+      console.log(`Registro com ID ${storeData.pMKTP_COD} deletado`);
+    } else {
+      console.error("Erro ao deletar o registro");
+    }
+  };
+
+  const handleConfirmDelete = async (
+    storeId: number | null,
+    storeName: string | null,
+    storePercentage: number | null,
+    storeDayPay: number
+  ) => {
+    if (typeof storeId === "number" && storeName && storePercentage !== null) {
       try {
-        const response = await deleteStoreService({
+        const storeData: DeleteStorePayload = {
           pMKTP_COD: storeId,
           pACAO: "E",
-        });
+          pMKTP_NOM_NAM: storeName,
+          pMKTP_VLR_PERCEN: storePercentage,
+          pMKTP_INT_DAYPAY: storeDayPay,
+          pMKTP_DAT_INIVIG: "",
+          pMKTP_DAT_FIMVIG: "",
+          pMKTP_VAL_MAR: 0,
+          pMKTP_VAL_FLTRAT: 0,
+          pMKTP_COD_MKT: 0,
+        };
 
-        if (response) {
-          console.log(`Registro com ID ${storeId} deletado`);
+        await handleDelete(storeData);
 
-          await storesStore
-            .getState()
-            .getStores(
-              storesStore.getState().filters.marketplace,
-              storesStore.getState().filters.searchValue,
-              storesStore.getState().page * storesStore.getState().rowsPerPage,
-              storesStore.getState().rowsPerPage
-            );
-        } else {
-          console.error("Erro ao deletar o registro");
-        }
+        await storesStore
+          .getState()
+          .getStores(
+            storesStore.getState().filters.marketplace,
+            storesStore.getState().filters.searchValue,
+            storesStore.getState().page * storesStore.getState().rowsPerPage,
+            storesStore.getState().rowsPerPage
+          );
       } catch (error) {
         console.error("Erro na requisição:", error);
       }
     } else {
-      console.warn("ID de registro inválido");
+      console.warn(
+        "ID de registro, nome da loja ou valor de pMKTP_VLR_PERCEN inválido"
+      );
     }
     setOpenDeleteModal(false);
   };
-
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
@@ -142,7 +180,14 @@ export default function StoresTable() {
       <DeleteConfirmationModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
-        onConfirm={() => handleConfirmDelete(selectedRow)}
+        onConfirm={() =>
+          handleConfirmDelete(
+            selectedRow,
+            selectedRowName,
+            storePercentage,
+            storeDayPay
+          )
+        }
         storeId={selectedRow}
       />
 
@@ -187,7 +232,10 @@ export default function StoresTable() {
             </TableRow>
 
             {storeList.map((row) => (
-              <TableRow key={row.MKTP_COD}>
+              <TableRow
+                key={row.MKTP_COD}
+                onClick={() => handleRowSelect(row.MKTP_COD, row.MKTP_NOM_NAM)}
+              >
                 <TableCell>{row.MKTP_COD}</TableCell>
                 <TableCell>{row.MKTP_NOM_NAM}</TableCell>
                 <TableCell>{row.MKTP_NAM_MKTPLC}</TableCell>
@@ -212,14 +260,19 @@ export default function StoresTable() {
                   >
                     <Edit />
                   </IconButton>
-                  <IconButton aria-label="delete">
-                    <Delete
-                      onClick={() => {
-                        setSelectedRow(row.MKTP_COD);
-                        setOpenDeleteModal(true);
-                      }}
-                      color="error"
-                    />
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() =>
+                      openDeleteConfirmation(
+                        row.MKTP_COD,
+                        row.MKTP_NOM_NAM,
+                        row.MKTP_VLR_PERCEN,
+                        row.MKTP_INT_DAYPAY
+                      )
+                    }
+                    color="error"
+                  >
+                    <Delete />
                   </IconButton>
                 </TableCell>
               </TableRow>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -32,6 +32,7 @@ function LanguageIcon() {
   } = useTranslation();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [currentLanguage, setCurrentLanguage] = useState(language);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -41,11 +42,10 @@ function LanguageIcon() {
     setAnchorElUser(null);
   };
 
-  const [currentLanguage, setCurrentLanguage] = useState(language);
-
   const handleChangeLanguage = (newLanguage: string) => {
     setCurrentLanguage(newLanguage);
     changeLanguage(newLanguage);
+    localStorage.setItem("language", newLanguage);
     setAnchorElUser(null);
   };
 

@@ -38,6 +38,7 @@
       "Name": "Nome",
       "Actions": "Ações",
       "Marketplace": "Loja",
+      "Store": "Loja",
       "User": "Usuário",
       "Type": "Tipo",
       "Pagination": "Linhas por página",
@@ -56,7 +57,10 @@
       "Upload": "Upload",
       "Apply": "Aplicar",
       "Reset": "Redefinir",
-      "Download": "Baixar Arquivo"
+      "Download": "Baixar Arquivo",
+      "Yes": "Sim",
+      "No": "Não",
+      "TitleDelete": "Deseja deletar este item?"
     },
     "Notifications": {
       "StoreNotCreated": "Error creating store",
