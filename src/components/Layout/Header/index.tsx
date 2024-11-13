@@ -80,6 +80,7 @@ function Header() {
                 key={route.path}
                 onClick={() => {
                   navigate(route.path);
+                  window.scrollTo(0, 0);
                   handleCloseNavMenu();
                 }}
               >

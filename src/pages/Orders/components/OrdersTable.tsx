@@ -116,6 +116,7 @@ export default function OrdersTable() {
         open={openDeleteModal}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+        storeId={null}
       />
 
       <TableContainer component={Paper}>

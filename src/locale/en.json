@@ -65,7 +65,9 @@
     "Notifications": {
       "StoreNotCreated": "Error creating store",
       "StoreCreated": "Store created!",
-      "StoreUpdated": "Store updated!"
+      "StoreUpdated": "Store updated!",
+      "StoreDelete": "deleted successfully!",
+      "StoreDeleteError": "Error deleting store"
     }
   }
 }

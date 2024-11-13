@@ -18,9 +18,13 @@ interface UploadFileModalProps {
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   open,
   onClose,
-  onAddRegister,
+  //onAddRegister,
 }: UploadFileModalProps) => {
-  const [newRegister, setNewRegister] = useState({
+  const [
+    ,
+    //newRegister
+    setNewRegister,
+  ] = useState({
     id: "",
     name: "",
     type: "",
@@ -37,7 +41,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     setNewRegister((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  /* const handleSubmit = () => {
     const newRow = createData(
       Number(newRegister.id),
       newRegister.name,
@@ -52,26 +56,26 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
     onAddRegister(newRow);
     onClose();
-  };
+  };*/
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Upload</DialogTitle>
       <DialogContent>
-
-        <Input
-          name="endOfTerm"
-          type="file"
-          fullWidth
-          onChange={handleChange}
-        />
-
+        <Input name="endOfTerm" type="file" fullWidth onChange={handleChange} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="contained" color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
+        <Button
+          onClick={
+            //handleSubmit
+            () => {}
+          }
+          variant="contained"
+          color="primary"
+        >
           Add
         </Button>
       </DialogActions>

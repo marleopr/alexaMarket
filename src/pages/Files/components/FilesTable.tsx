@@ -13,7 +13,7 @@ import { Add, Delete, Edit } from "@mui/icons-material";
 import { rows } from "../../../constants/mockDataFiles";
 import NewRegisterModal from "./UploadFileModal";
 import DeleteConfirmationModal from "../../../components/DeleteConfirmationModal";
-import FilesFilters from "./FilesFilters";
+//import FilesFilters from "./FilesFilters";
 import { useTranslation } from "react-i18next";
 import PaginationControls from "../../../components/PaginationControls";
 
@@ -24,9 +24,12 @@ export default function FilesTable() {
   const [open, setOpen] = React.useState(false);
   const [tableRows, setTableRows] = React.useState(rows);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-  const [searchFree, setSearchFree] = React.useState("");
-  const [searchDate, setSearchDate] = React.useState("");
-  const [marketplace, setMarketplace] = React.useState("");
+  const [searchFree, //setSearchFree
+    ] = React.useState("");
+  const [searchDate, //setSearchDate
+    ] = React.useState("");
+  const [marketplace, //setMarketplace
+    ] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -90,7 +93,7 @@ export default function FilesTable() {
           alignItems: "center",
         }}
       >
-        <FilesFilters
+       {/* <FilesFilters
           rows={rows}
           marketplace={marketplace}
           setMarketplace={setMarketplace}
@@ -99,7 +102,7 @@ export default function FilesTable() {
           searchDate={searchDate}
           setSearchDate={setSearchDate}
           t={t}
-        />
+        />*/}
         <IconButton color="primary" onClick={handleClickOpen}>
           <Add />
         </IconButton>
@@ -115,6 +118,7 @@ export default function FilesTable() {
         open={openDeleteModal}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+        storeId={null}
       />
 
       <TableContainer component={Paper}>

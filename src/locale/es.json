@@ -64,7 +64,10 @@
     },
     "Notifications": {
       "StoreNotCreated": "Error creating store",
-      "StoreCreated": "Store created!"
+      "StoreCreated": "Store created!",
+      "StoreUpdated": "¡Tienda actualizada!",
+      "StoreDelete": "¡Eliminada con éxito!",
+      "StoreDeleteError": "Error al eliminar la tienda"
     }
   }
 }

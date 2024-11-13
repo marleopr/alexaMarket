@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -77,7 +77,7 @@ function LanguageIcon() {
             sx={{
               backgroundColor:
                 currentLanguage === setting.value
-                  ? colors.green.light
+                  ? colors.green.main
                   : "inherit",
               border:
                 currentLanguage === setting.value

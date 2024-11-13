@@ -23,6 +23,7 @@ import {
   DeleteStorePayload,
   deleteStoreService,
 } from "../../../services/store/delete-stores";
+import { useNotifications } from "@toolpad/core";
 
 export default function StoresTable() {
   const { t } = useTranslation();
@@ -47,10 +48,31 @@ export default function StoresTable() {
   const [storePercentage, setStorePercentage] = useState<number | null>(null);
   const [storeDayPay, setStoreDayPay] = useState<number>(0);
 
-  const handleRequestSort = (property: keyof RowType) => {
+  const notifications = useNotifications();
+
+  const handleRequestSort = (property: keyof StoreType) => {
     const isAsc = orderBy === property && orderDirection === "asc";
-    setOrderDirection(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+    const newOrderDirection = isAsc ? "desc" : "asc";
+    setOrderDirection(newOrderDirection);
+    setOrderBy(property as keyof RowType);
+
+    const sortedList = [...storeList].sort((a, b) => {
+      const isAscOrder = newOrderDirection === "asc";
+      if (property === "MKTP_NOM_NAM") {
+        return (
+          (a.MKTP_NOM_NAM < b.MKTP_NOM_NAM ? -1 : 1) * (isAscOrder ? 1 : -1)
+        );
+      }
+      if (property === "MKTP_NAM_MKTPLC") {
+        return (
+          (a.MKTP_NAM_MKTPLC < b.MKTP_NAM_MKTPLC ? -1 : 1) *
+          (isAscOrder ? 1 : -1)
+        );
+      }
+      return 0;
+    });
+
+    storesStore.setState({ storeList: sortedList });
   };
 
   const handleRowSelect = (rowId: number, rowName: string) => {
@@ -72,12 +94,22 @@ export default function StoresTable() {
   };
 
   const handleDelete = async (storeData: DeleteStorePayload) => {
-    const response = await deleteStoreService(storeData);
+    const requestMsg = await deleteStoreService(storeData);
 
-    if (response) {
-      console.log(`Registro com ID ${storeData.pMKTP_COD} deletado`);
+    if (requestMsg) {
+      notifications.show(
+        `${storeData.pMKTP_NOM_NAM} ${t("Notifications.StoreDelete")}`,
+        {
+          severity: "success",
+        }
+      );
     } else {
-      console.error("Erro ao deletar o registro");
+      notifications.show(
+        `${t("Notifications.StoreDeleteError")} ${storeData.pMKTP_NOM_NAM}`,
+        {
+          severity: "error",
+        }
+      );
     }
   };
 
@@ -202,7 +234,7 @@ export default function StoresTable() {
                 <TableSortLabel
                   active={orderBy === "name"}
                   direction={orderBy === "name" ? orderDirection : "asc"}
-                  onClick={() => handleRequestSort("name")}
+                  onClick={() => handleRequestSort("MKTP_NOM_NAM")}
                 >
                   {t("Common.Name")}
                 </TableSortLabel>
@@ -215,7 +247,7 @@ export default function StoresTable() {
                 <TableSortLabel
                   active={orderBy === "marketplace"}
                   direction={orderBy === "marketplace" ? orderDirection : "asc"}
-                  onClick={() => handleRequestSort("marketplace")}
+                  onClick={() => handleRequestSort("MKTP_NAM_MKTPLC")}
                 >
                   {t("Common.Marketplace")}
                 </TableSortLabel>

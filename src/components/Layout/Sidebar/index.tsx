@@ -20,7 +20,10 @@ const Sidebar = () => {
           <Button
             key={route.path}
             variant={isActive(route.path) ? "contained" : "text"}
-            onClick={() => navigate(route.path)}
+            onClick={() => {
+              navigate(route.path);
+              window.scrollTo(0, 0);
+            }}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -36,9 +39,9 @@ const Sidebar = () => {
               <span className="icon">{route.icon}</span>
             ) : (
               <>
-              <Tooltip title={t(route.label)} placement="right">
-                <span className="icon">{route.icon}</span>
-              </Tooltip>
+                <Tooltip title={t(route.label)} placement="right">
+                  <span className="icon">{route.icon}</span>
+                </Tooltip>
                 <span className="menu-text">{t(route.label)}</span>
               </>
             )}
@@ -56,13 +59,12 @@ const Bar = styled.div<{ expanded: string }>`
   background-color: #fff;
   transition: width 0.4s;
   overflow: hidden;
-  position: sticky;
-  top: 0;
+  position: fixed;
   gap: 0.2rem;
   height: calc(100vh - ${HEADER_HEIGHT});
   padding: 0 1rem;
   min-width: ${(props) => (props.expanded === "true" ? "180px" : "38px")};
-
+  
   .menu-text {
     display: ${(props) => (props.expanded === "true" ? "inline" : "none")};
   }
@@ -70,6 +72,7 @@ const Bar = styled.div<{ expanded: string }>`
   @media (max-width: 600px) {
     width: 16px;
     min-width: 16px;
+    position: sticky;
     padding: 0;
     & > *:first-child {
       display: none;

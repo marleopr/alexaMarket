@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import {
   Box,
   FormControl,
@@ -74,3 +74,4 @@ const FilesFilters = ({
 };
 
 export default FilesFilters;
+*/
