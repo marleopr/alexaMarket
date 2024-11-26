@@ -39,11 +39,12 @@ export const appStore = create<Store>()((set, get) => ({
     set({ applicationLoading }),
 
   loggedUser: {
+    data: "",
     globalAccountKey: "",
     productKey: "",
     account: "",
     userAccountID: "",
-    email: "",
+    Email: "",
     active: false,
     name: "",
     phone: "",
@@ -67,7 +68,10 @@ export const appStore = create<Store>()((set, get) => ({
       console.error("Error fetching marketplaces");
       return;
     }
-    console.log('marketplaces opts -> ', response.data.data);
-    set({ marketplaceList: response.data.data.records, marketplaceListLoading: false });
+    console.log("marketplaces opts -> ", response.data.data);
+    set({
+      marketplaceList: response.data.data.records,
+      marketplaceListLoading: false,
+    });
   },
 }));

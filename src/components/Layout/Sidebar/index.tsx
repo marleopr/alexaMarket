@@ -63,7 +63,7 @@ const Bar = styled.div<{ expanded: string }>`
   gap: 0.2rem;
   height: calc(100vh - ${HEADER_HEIGHT});
   padding: 0 1rem;
-  min-width: ${(props) => (props.expanded === "true" ? "180px" : "38px")};
+  min-width: ${(props) => (props.expanded === "true" ? "180px" : "58px")};
   
   .menu-text {
     display: ${(props) => (props.expanded === "true" ? "inline" : "none")};

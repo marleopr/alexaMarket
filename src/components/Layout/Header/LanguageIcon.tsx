@@ -77,11 +77,11 @@ function LanguageIcon() {
             sx={{
               backgroundColor:
                 currentLanguage === setting.value
-                  ? colors.green.main
+                  ? "#ececec"
                   : "inherit",
               border:
                 currentLanguage === setting.value
-                  ? `2px solid ${colors.green.main}`
+                  ? `2px solid #e2e2e2`
                   : "none",
               borderRadius: 1,
             }}

@@ -117,7 +117,7 @@ const LoginPage: FC = () => {
   return (
     <Wrapper>
       <CardContainer>
-        <Card variant="outlined" sx={{ p: 4, maxWidth: 400 }}>
+        <Card variant="outlined" sx={{ p: 4, maxWidth: 400, borderRadius: "15px" }}>
           <Typography
             component="h1"
             variant="h4"
