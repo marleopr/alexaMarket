@@ -1,23 +1,18 @@
 import API from "../../api";
 import { requestHandler } from "../../api/requestHandler";
-import { productKey } from "../../constants/base_url";
-
 interface LoginParams {
-  login: string;
+  username: string;
   password: string;
-  account: string;
 }
 
 interface LoginResponse {
-  id: string;
-  expiredPassword: boolean;
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: string;
-  blockedUntil: string;
+  token: string;
+  companyId: string | null;
 }
 
-export const loginService = requestHandler<LoginParams, LoginResponse>((body) =>
-  API.post("Login", { ...body, productKey })
-);
-
+export const loginService = requestHandler<LoginParams, LoginResponse>((body) => {
+  console.log('Requisição enviada para login:', body);
+  return API.post("/public/v1/login", body);
+});
+console.log(API.defaults.baseURL)
+export type { LoginResponse };

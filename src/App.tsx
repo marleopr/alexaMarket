@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import {
   getTokenFromLocalStorage,
   getUserIdFromLocalStorage,
+  removeAuthDataFromLocalStorage,
   saveRefreshTokenInLocalStorage,
   saveTokenInLocalStorage,
 } from "./utils/local-storage-helper";
@@ -33,8 +34,7 @@ function App() {
         saveRefreshTokenInLocalStorage(res.data.refreshToken);
         return getLoggedUser();
       }
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
+      removeAuthDataFromLocalStorage();
       setApplicationLoading(false);
     } catch (error) {
       console.error("Error refreshing token", error);
@@ -64,7 +64,7 @@ function App() {
   const handleGetFunctions = async () => {
     const res = await getFunctions();
     if (res.code === "success") {
-      console.log('functions -> ', res.data);
+      console.log("functions -> ", res.data);
     }
   };
 

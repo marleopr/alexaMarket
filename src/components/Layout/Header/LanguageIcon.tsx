@@ -76,9 +76,7 @@ function LanguageIcon() {
             onClick={() => handleChangeLanguage(setting.value)}
             sx={{
               backgroundColor:
-                currentLanguage === setting.value
-                  ? "#ececec"
-                  : "inherit",
+                currentLanguage === setting.value ? "#ececec" : "inherit",
               border:
                 currentLanguage === setting.value
                   ? `2px solid #e2e2e2`

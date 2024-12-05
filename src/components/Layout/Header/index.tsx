@@ -6,15 +6,18 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
 import DesktopHeader from "./DesktopHeader";
 import LanguageIcon from "./LanguageIcon";
+import { Tooltip } from "@mui/material";
 import NotificationIcon from "./NotificationIcon";
 import { appStore } from "../../../store/ApplicationStore";
 import { routesToAppearInSidebar } from "../../../routes";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import UserMenu from "./UserMenu";
+import { removeAuthDataFromLocalStorage } from "../../../utils/local-storage-helper";
+import { LogoutOutlined } from "@mui/icons-material";
 
 export const HEADER_HEIGHT = "68px";
 
@@ -89,6 +92,19 @@ function Header() {
                 </Box>
               </MenuItem>
             ))}
+
+            <MenuItem
+              key={"logout"}
+              onClick={() => {
+                removeAuthDataFromLocalStorage();
+                window.location.reload();
+              }}
+            >
+              <Box display="flex" alignItems="center" gap={1}>
+                <LogoutOutlined />
+                <Typography>{t("Logout")}</Typography>
+              </Box>
+            </MenuItem>
           </Menu>
         </Box>
 
@@ -103,7 +119,13 @@ function Header() {
         >
           <NotificationIcon />
           <LanguageIcon />
-          <UserMenu loggedUser={loggedUser} />
+          <Tooltip title={loggedUser.name || ""}>
+            <Avatar
+              alt={loggedUser.name || ""}
+              src="/static/images/avatar/2.jpg"
+              sx={{ width: 28, height: 28 }}
+            />
+          </Tooltip>
         </Box>
       </Toolbar>
     </AppBar>

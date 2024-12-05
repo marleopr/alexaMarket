@@ -1,5 +1,5 @@
 import { FC, FormEvent, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { appStore } from "../../store/ApplicationStore";
 import { PATHS } from "../../routes/paths";
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import { changePasswordService } from "../../services/login/change-password-service";
+import { useTranslation } from "react-i18next";
 
 const ResetPasswordPage: FC = () => {
   const notifications = useNotifications();
@@ -135,10 +136,14 @@ const ResetPasswordPage: FC = () => {
     return isValid;
   };
 
+  const { t } = useTranslation();
   return (
     <Wrapper>
       <CardContainer>
-        <Card variant="outlined" sx={{ p: 4, maxWidth: 400 }}>
+        <Card
+          variant="outlined"
+          sx={{ p: 4, maxWidth: 400, borderRadius: "8px" }}
+        >
           <Typography
             component="h1"
             variant="h4"
@@ -159,13 +164,13 @@ const ResetPasswordPage: FC = () => {
               mb: 3,
             }}
           >
-            Esqueceu a senha?
+            {t("loginForgotPassword")}
           </Typography>
           <Typography
             variant="body1"
             sx={{ textAlign: "center", mb: 2, color: "gray" }}
           >
-            Informe suas credenciais e enviaremos um link de recadastro
+            {t("loginResetPasswordMessage")}
           </Typography>
           <Box
             component="form"
@@ -178,7 +183,7 @@ const ResetPasswordPage: FC = () => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">E-mail</FormLabel>
+              <FormLabel htmlFor="email">{t("Common.Email")}</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
@@ -195,7 +200,7 @@ const ResetPasswordPage: FC = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="newPassword">Novo password</FormLabel>
+              <FormLabel htmlFor="newPassword">{t("newPassword")}</FormLabel>
               <TextField
                 error={newPasswordError}
                 helperText={newPasswordErrorMessage}
@@ -210,7 +215,7 @@ const ResetPasswordPage: FC = () => {
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="confirmPassword">
-                Confirme sua senha
+                {t("confirmPassword")}
               </FormLabel>
               <TextField
                 error={confirmPasswordError}
@@ -231,11 +236,8 @@ const ResetPasswordPage: FC = () => {
               size="large"
               onClick={validateInputs}
             >
-              Redefinir senha
+              {t("resetPassword")}
             </Button>
-            <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
-              <Link to={PATHS.LOGIN}>Já possui uma conta ?</Link>
-            </Box>
           </Box>
         </Card>
       </CardContainer>

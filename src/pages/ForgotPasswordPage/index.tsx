@@ -15,9 +15,11 @@ import {
 } from "@mui/material";
 
 import { recoverPasswordService } from "../../services/login/recover-password-service";
+import { useTranslation } from "react-i18next";
 
 const ForgotPasswordPage: FC = () => {
   const notifications = useNotifications();
+  const { t } = useTranslation();
 
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
@@ -29,6 +31,7 @@ const ForgotPasswordPage: FC = () => {
     if (isAuthenticated) {
       navigate(PATHS.DASHBOARD);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -83,7 +86,10 @@ const ForgotPasswordPage: FC = () => {
   return (
     <Wrapper>
       <CardContainer>
-        <Card variant="outlined" sx={{ p: 4, maxWidth: 400 }}>
+        <Card
+          variant="outlined"
+          sx={{ p: 4, maxWidth: 400, borderRadius: "8px" }}
+        >
           <Typography
             component="h1"
             variant="h4"
@@ -104,13 +110,13 @@ const ForgotPasswordPage: FC = () => {
               mb: 3,
             }}
           >
-            Esqueceu a senha?
+            {t("loginForgotPassword")}
           </Typography>
           <Typography
             variant="body1"
             sx={{ textAlign: "center", mb: 2, color: "gray" }}
           >
-            Informe suas credenciais e enviaremos um link de recadastro
+            {t("loginForgotPasswordMessage")}
           </Typography>
           <Box
             component="form"
@@ -123,14 +129,14 @@ const ForgotPasswordPage: FC = () => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">E-mail</FormLabel>
+              <FormLabel htmlFor="email">{t("Common.Email")}</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
                 id="email"
                 type="email"
                 name="email"
-                placeholder="seu@email.com"
+                placeholder="your@email.com"
                 autoComplete="email"
                 autoFocus
                 required
@@ -146,10 +152,10 @@ const ForgotPasswordPage: FC = () => {
               size="large"
               onClick={validateInputs}
             >
-              Enviar e-mail
+              {t("Common.Send")}
             </Button>
             <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
-              <Link to={PATHS.LOGIN}>Já possui uma conta ?</Link>
+              <Link to={PATHS.LOGIN}>{t("alreadyHaveAnAccount")}</Link>
             </Box>
           </Box>
         </Card>

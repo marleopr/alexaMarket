@@ -17,55 +17,52 @@ import {
 import { useTranslation } from "react-i18next";
 import { appStore } from "../../../store/ApplicationStore";
 import { storesStore } from "../StoresStore";
-import { CreateStorePayload } from "../../../services/store/create-store";
+import { EditStorePayload } from "../../../services/store/edit-store";
 import { MarketPlacesType } from "../../../services/marketplaces/get-market-places";
 import { useNotifications } from "@toolpad/core";
+import { StoreType } from "../../../services/store/get-stores";
 import { formatModalTable } from "../../../utils/format-modal-table";
-import { colors } from "../../../theme";
 
-interface NewRegisterModalProps {
+
+interface EditRegisterModalProps {
   onClose: () => void;
+  storeData: StoreType | null;
 }
 
-const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
+const EditStoreModal: React.FC<EditRegisterModalProps> = ({
   onClose,
-}: NewRegisterModalProps) => {
+  storeData,
+}: EditRegisterModalProps) => {
+  if (!storeData) {
+    return null;
+  }
+
   const { t } = useTranslation();
   const { marketplaceList, getMarketplaces } = appStore();
-  const {
-    createStore,
-    getStores,
-    page,
-    rowsPerPage,
-    filters,
-    createStoreLoading,
-  } = storesStore();
+  const { editStore, getStores, page, rowsPerPage, filters, editStoreLoading } =
+    storesStore();
   const notifications = useNotifications();
 
-  const [newRegister, setNewRegister] = useState<CreateStorePayload>({
-    pMKTP_COD: null,
-    pACAO: "I",
-    pMKTP_COD_MKT: 0,
-    pMKTP_DAT_INIVIG: formatModalTable(new Date().toISOString()),
-    pMKTP_DAT_FIMVIG: formatModalTable(
-      new Date(
-        new Date().setFullYear(new Date().getFullYear() + 1)
-      ).toISOString()
-    ),
-    pMKTP_INT_DAYPAY: 0,
-    pMKTP_NOM_NAM: "",
-    pMKTP_VAL_FLTRAT: 0,
-    pMKTP_VAL_MAR: 0,
-    pMKTP_VLR_PERCEN: 0,
+  const [register, setRegister] = useState<EditStorePayload>({
+    pACAO: "A",
+    pMKTP_COD: storeData.MKTP_COD,
+    pMKTP_COD_MKT: storeData.MKTP_COD_MKT,
+    pMKTP_NOM_NAM: storeData.MKTP_NOM_NAM,
+    pMKTP_VLR_PERCEN: storeData.MKTP_VLR_PERCEN,
+    pMKTP_DAT_INIVIG: formatModalTable(storeData.MKTP_DAT_INIVIG),
+    pMKTP_DAT_FIMVIG: formatModalTable(storeData.MKTP_DAT_FIMVIG),
+    pMKTP_VAL_FLTRAT: storeData.MKTP_VAL_FLTRAT,
+    pMKTP_VAL_MAR: storeData.MKTP_VAL_MAR,
+    pMKTP_INT_DAYPAY: storeData.MKTP_INT_DAYPAY,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewRegister((prev) => ({ ...prev, [name]: value }));
+    setRegister((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
-    const requestMsg = await createStore(newRegister);
+    const requestMsg = await editStore(register);
 
     if (requestMsg) {
       notifications.show(requestMsg, {
@@ -78,7 +75,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
         page,
         rowsPerPage
       );
-      notifications.show(t("Notifications.StoreCreated"), {
+      notifications.show(t("Notifications.StoreUpdated"), {
         severity: "success",
       });
       onClose();
@@ -87,7 +84,6 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
 
   useEffect(() => {
     getMarketplaces();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [errors, setErrors] = useState({
@@ -98,23 +94,23 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
   });
 
   const validateInputs = () => {
-    const errs: { [key: string]: boolean } = {
+    let errs: any = {
       pMKTP_NOM_NAM: false,
       pMKTP_COD_MKT: false,
       pMKTP_DAT_INIVIG: false,
       pMKTP_DAT_FIMVIG: false,
     };
 
-    if (!newRegister.pMKTP_NOM_NAM) {
+    if (!register.pMKTP_NOM_NAM) {
       errs.pMKTP_NOM_NAM = true;
     }
-    if (newRegister.pMKTP_COD_MKT === 0) {
+    if (register.pMKTP_COD_MKT === 0) {
       errs.pMKTP_COD_MKT = true;
     }
-    if (!newRegister.pMKTP_DAT_INIVIG) {
+    if (!register.pMKTP_DAT_INIVIG) {
       errs.pMKTP_DAT_INIVIG = true;
     }
-    if (!newRegister.pMKTP_DAT_FIMVIG) {
+    if (!register.pMKTP_DAT_FIMVIG) {
       errs.pMKTP_DAT_FIMVIG = true;
     }
 
@@ -129,7 +125,9 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
 
   return (
     <Dialog open={true} onClose={onClose}>
-      <DialogTitle>{t("AddNewRegister.AddNewRegister")}</DialogTitle>
+      <DialogTitle>
+        {t("Common.Store")} - {register.pMKTP_COD}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>{t("AddNewRegister.Dialog")}</DialogContentText>
 
@@ -146,7 +144,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
           <FormControl>
             <TextField
               margin="dense"
-              value={newRegister.pMKTP_NOM_NAM}
+              value={register.pMKTP_NOM_NAM}
               name="pMKTP_NOM_NAM"
               autoFocus
               label={t("Common.Name")}
@@ -164,7 +162,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
             <TextField
               margin="dense"
               name="pMKTP_VLR_PERCEN"
-              value={newRegister.pMKTP_VLR_PERCEN}
+              value={register.pMKTP_VLR_PERCEN}
               label={t("Common.Commission")}
               type="number"
               fullWidth
@@ -181,14 +179,14 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
               name="pMKTP_COD_MKT"
               labelId="marketplace-label"
               id="marketplace"
-              value={newRegister.pMKTP_COD_MKT}
+              value={register.pMKTP_COD_MKT}
               label={t("Common.Marketplace")}
               required
               fullWidth
               error={errors.pMKTP_COD_MKT}
               onChange={(e) =>
-                setNewRegister({
-                  ...newRegister,
+                setRegister({
+                  ...register,
                   pMKTP_COD_MKT: e.target.value as number,
                 })
               }
@@ -201,7 +199,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
             </Select>
             <Typography
               variant="caption"
-              style={{ color: colors.red.error, margin: "3px 0 0 14px" }}
+              style={{ color: "#d32f2f", margin: "3px 0 0 14px" }}
             >
               {errors.pMKTP_COD_MKT ? t("Common.Required") : ""}
             </Typography>
@@ -211,7 +209,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
         <TextField
           margin="dense"
           name="pMKTP_VAL_FLTRAT"
-          value={newRegister.pMKTP_VAL_FLTRAT}
+          value={register.pMKTP_VAL_FLTRAT}
           label={t("Marketplaces.FlatRate")}
           type="number"
           fullWidth
@@ -221,7 +219,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
         <TextField
           margin="dense"
           name="pMKTP_VAL_MAR"
-          value={newRegister.pMKTP_VAL_MAR}
+          value={register.pMKTP_VAL_MAR}
           label={t("Marketplaces.MarginError")}
           type="number"
           fullWidth
@@ -232,7 +230,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
         <TextField
           margin="dense"
           name="pMKTP_INT_DAYPAY"
-          value={newRegister.pMKTP_INT_DAYPAY}
+          value={register.pMKTP_INT_DAYPAY}
           label={t("Marketplaces.DaysForPayment")}
           type="number"
           fullWidth
@@ -241,7 +239,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
         />
         <TextField
           margin="dense"
-          value={newRegister.pMKTP_DAT_INIVIG}
+          value={register.pMKTP_DAT_INIVIG}
           label={t("Marketplaces.StartOfTerm")}
           type="date"
           name="pMKTP_DAT_INIVIG"
@@ -253,7 +251,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
           helperText={errors.pMKTP_DAT_INIVIG ? t("Common.Required") : ""}
         />
         <TextField
-          value={newRegister.pMKTP_DAT_FIMVIG}
+          value={register.pMKTP_DAT_FIMVIG}
           margin="dense"
           name="pMKTP_DAT_FIMVIG"
           label={t("Marketplaces.EndOfTerm")}
@@ -271,7 +269,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
           onClick={onClose}
           variant="text"
           color="primary"
-          disabled={createStoreLoading}
+          disabled={editStoreLoading}
         >
           {t("Buttons.Cancel")}
         </Button>
@@ -279,7 +277,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
           onClick={validateInputs}
           variant="contained"
           color="primary"
-          disabled={createStoreLoading}
+          disabled={editStoreLoading}
         >
           {t("Buttons.Add")}
         </Button>
@@ -288,4 +286,4 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
   );
 };
 
-export default NewRegisterModal;
+export default EditStoreModal;

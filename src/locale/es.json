@@ -4,6 +4,7 @@
     "StoresMenu": "Tiendas",
     "OrdersMenu": "Pedidos",
     "FilesMenu": "Archivos",
+    "Logout": "Cerrar sesión",
     "Marketplaces": {
       "FlatRate": "Tasa fija",
       "MarginError": "Margen de error",

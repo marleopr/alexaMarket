@@ -5,6 +5,9 @@ export const colors = {
   green: {
     main: "rgb(0, 150, 136)",
   },
+  red:{
+    error: "#d32f2f"
+  }
 };
 
 export const theme = createTheme(

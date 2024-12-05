@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { HEADER_HEIGHT } from "../Header";
-import { Box, Button, Tooltip } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { routesToAppearInSidebar } from "../../../routes";
 import { useNavigate } from "react-router-dom";
 import { appStore } from "../../../store/ApplicationStore";
 import { useTranslation } from "react-i18next";
+import { removeAuthDataFromLocalStorage } from "../../../utils/local-storage-helper";
+import { LogoutRounded } from "@mui/icons-material";
 
 const Sidebar = () => {
   const { menuIsOpen } = appStore();
@@ -12,6 +14,11 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const isActive = (path: string) => window.location.pathname.includes(path);
+
+  const handleLogout = () => {
+    removeAuthDataFromLocalStorage();
+    window.location.reload();
+  };
 
   return (
     <Bar expanded={menuIsOpen.toString()}>
@@ -25,29 +32,24 @@ const Sidebar = () => {
               window.scrollTo(0, 0);
             }}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: menuIsOpen ? "flex-start" : "center",
               gap: menuIsOpen ? "8px" : "0",
-              width: "100%",
-              "& .icon": {
-                fontSize: "24px",
-              },
             }}
+            title={t(route.label)}
+            startIcon={route.icon}
           >
-            {!menuIsOpen ? (
-              <span className="icon">{route.icon}</span>
-            ) : (
-              <>
-                <Tooltip title={t(route.label)} placement="right">
-                  <span className="icon">{route.icon}</span>
-                </Tooltip>
-                <span className="menu-text">{t(route.label)}</span>
-              </>
-            )}
+            <span className="menu-text">{t(route.label)}</span>
           </Button>
         ))}
       </Box>
+
+      <Button
+        variant="text"
+        onClick={handleLogout}
+        startIcon={<LogoutRounded />}
+        sx={{ mb: 2 }}
+      >
+        <span className="menu-text"> {t("Logout")}</span>
+      </Button>
     </Bar>
   );
 };
@@ -55,21 +57,27 @@ const Sidebar = () => {
 export default Sidebar;
 
 const Bar = styled.div<{ expanded: string }>`
-  width: ${(props) => (props.expanded === "true" ? "180px" : "38px")};
+  width: ${(props) => (props.expanded === "true" ? "180px" : "68px")};
   background-color: #fff;
   transition: width 0.4s;
+
   overflow: hidden;
   position: fixed;
   gap: 0.2rem;
   height: calc(100vh - ${HEADER_HEIGHT});
-  padding: 0 1rem;
-  min-width: ${(props) => (props.expanded === "true" ? "180px" : "58px")};
-  
+  padding: ${(props) => (props.expanded === "true" ? "0 1rem" : "0 0.1rem")};
+
+  min-width: ${(props) => (props.expanded === "true" ? "180px" : "68px")};
+
   .menu-text {
     display: ${(props) => (props.expanded === "true" ? "inline" : "none")};
   }
 
-  @media (max-width: 600px) {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 500px) {
     width: 16px;
     min-width: 16px;
     position: sticky;

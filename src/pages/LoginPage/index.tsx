@@ -8,9 +8,7 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormLabel,
   TextField,
   Typography,
@@ -18,16 +16,17 @@ import {
 import { loginService } from "../../services/login/login-service";
 import { getUserInfoService } from "../../services/user/get-user-info-service";
 import {
-  saveRefreshTokenInLocalStorage,
   saveTokenInLocalStorage,
   saveUserIdInLocalStorage,
 } from "../../utils/local-storage-helper";
+import { useTranslation } from "react-i18next";
 
 const LoginPage: FC = () => {
   const notifications = useNotifications();
+  const { t } = useTranslation();
 
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [userError, setUserError] = useState(false);
+  const [userErrorMessage, setUserErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
@@ -38,8 +37,7 @@ const LoginPage: FC = () => {
     if (isAuthenticated) {
       navigate(PATHS.DASHBOARD);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,37 +47,55 @@ const LoginPage: FC = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const res = await loginService({
-        login: data.get("email") as string,
+      const response = await loginService({
+        username: data.get("username") as string,
         password: data.get("password") as string,
-        account: data.get("email") as string,
       });
 
-      if (res.code === "error") {
-        return notifications.show("Usuário ou senha inválidos", {
-          severity: "error",
-          autoHideDuration: 3000,
+      if (response.code === "error") {
+        return notifications.show(
+          response.error?.message || "Erro ao realizar login",
+          {
+            severity: "error",
+            autoHideDuration: 3000,
+          }
+        );
+      }
+
+      const { token, companyId } = response.data;
+
+      saveTokenInLocalStorage(token);
+
+      if (companyId) {
+        saveUserIdInLocalStorage(companyId);
+
+        const loggedUserInfo = await getUserInfoService({ id: companyId });
+
+        if (loggedUserInfo.code === "error") {
+          return notifications.show("Erro ao buscar informações do usuário", {
+            severity: "error",
+            autoHideDuration: 3000,
+          });
+        }
+
+        setLoggedUser({
+          username: loggedUserInfo.data.username, // Use the username returned by the backend
+          role: "user", // Assuming it's a regular user
+          name: loggedUserInfo.data.name, // Name from the user info response
+          // You can omit email and other details if not needed
+        });
+      } else {
+        setLoggedUser({
+          username: "admin", // Admin username, could be a fixed value
+          role: "admin", // Role for admin
+          // You can exclude 'name' or any other data if not necessary
         });
       }
 
-      saveUserIdInLocalStorage(res.data.id);
-      saveRefreshTokenInLocalStorage(res.data.refreshToken);
-      saveTokenInLocalStorage(res.data.accessToken);
-
-      const loggedUserInfo = await getUserInfoService({ id: res.data.id });
-
-      if (loggedUserInfo.code === "error") {
-        return notifications.show("Erro ao buscar informações do usuário", {
-          severity: "error",
-          autoHideDuration: 3000,
-        });
-      }
-
-      setLoggedUser(loggedUserInfo.data);
       setIsAuthenticated(true);
       navigate(PATHS.DASHBOARD);
     } catch (error) {
-      notifications.show("Erro ao realizar login", {
+      notifications.show("Erro inesperado ao realizar login", {
         severity: "error",
         autoHideDuration: 3000,
       });
@@ -88,18 +104,18 @@ const LoginPage: FC = () => {
   };
 
   const validateInputs = () => {
-    const email = document.getElementById("email") as HTMLInputElement;
+    const user = document.getElementById("username") as HTMLInputElement;
     const password = document.getElementById("password") as HTMLInputElement;
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Email inválido");
+    if (!user.value || user.value.trim().length === 0) {
+      setUserError(true);
+      setUserErrorMessage("Usuário inválido");
       isValid = false;
     } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
+      setUserError(false);
+      setUserErrorMessage("");
     }
 
     if (!password.value) {
@@ -117,7 +133,10 @@ const LoginPage: FC = () => {
   return (
     <Wrapper>
       <CardContainer>
-        <Card variant="outlined" sx={{ p: 4, maxWidth: 400, borderRadius: "15px" }}>
+        <Card
+          variant="outlined"
+          sx={{ p: 4, maxWidth: 400, borderRadius: "8px" }}
+        >
           <Typography
             component="h1"
             variant="h4"
@@ -128,13 +147,13 @@ const LoginPage: FC = () => {
               fontSize: "clamp(2rem, 5vw, 2.5rem)",
             }}
           >
-            $ave
+            Offer
           </Typography>
           <Typography
             variant="body1"
             sx={{ textAlign: "center", mb: 2, color: "gray" }}
           >
-            Por favor, entre com seus dados
+            {t("loginMessage")}
           </Typography>
           <Box
             component="form"
@@ -147,24 +166,23 @@ const LoginPage: FC = () => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="user">{t("Common.User")}</FormLabel>
               <TextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="email"
-                type="email"
-                name="email"
-                placeholder="seu@email.com"
-                autoComplete="email"
-                autoFocus
+                error={userError}
+                helperText={userErrorMessage}
+                id="username"
+                type="text"
+                name="username"
+                placeholder="Nome de usuário"
+                autoComplete="username"
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? "error" : "primary"}
+                color={userError ? "error" : "primary"}
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Senha</FormLabel>
+              <FormLabel htmlFor="password">{t("Common.Password")}</FormLabel>
               <TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
@@ -179,21 +197,11 @@ const LoginPage: FC = () => {
                 color={passwordError ? "error" : "primary"}
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Lembrar me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size="large"
-              onClick={validateInputs}
-            >
-              Entrar
+            <Button type="submit" fullWidth variant="contained" size="large">
+              {t("loginButton")}
             </Button>
             <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
-              <Link to={PATHS.FORGOT_PASSWORD}>Esqueceu a senha?</Link>
+              <Link to={PATHS.FORGOT_PASSWORD}>{t("loginForgotPassword")}</Link>
             </Box>
           </Box>
         </Card>

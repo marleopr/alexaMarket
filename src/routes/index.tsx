@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,7 +12,8 @@ import React from "react";
 import Dashboard from "../pages/Dashboard";
 import Stores from "../pages/Stores";
 import Orders from "../pages/Orders";
-import Files from "../pages/Files";
+// import Files from "../pages/Files";
+import Files from "../pages/Stores copy";
 import Layout from "../components/Layout";
 import AxiosInterceptorComponent from "../api/AxiosInterceptorComponent";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";

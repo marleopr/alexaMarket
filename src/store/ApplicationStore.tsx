@@ -9,7 +9,7 @@ type Store = {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 
-  menuIsOpen: string;
+  menuIsOpen: "true" | "false";
 
   toggleMenu: () => void;
 
@@ -29,7 +29,7 @@ export const appStore = create<Store>()((set, get) => ({
   isAuthenticated: false,
   setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
 
-  menuIsOpen: "true",
+  menuIsOpen: "false",
   toggleMenu: () => {
     set({ menuIsOpen: get().menuIsOpen === "true" ? "false" : "true" });
   },
@@ -39,12 +39,11 @@ export const appStore = create<Store>()((set, get) => ({
     set({ applicationLoading }),
 
   loggedUser: {
-    data: "",
     globalAccountKey: "",
     productKey: "",
     account: "",
     userAccountID: "",
-    Email: "",
+    email: "",
     active: false,
     name: "",
     phone: "",

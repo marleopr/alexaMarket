@@ -4,6 +4,16 @@
     "StoresMenu": "Stores",
     "OrdersMenu": "Orders",
     "FilesMenu": "Files",
+    "Logout": "Logout",
+    "loginMessage": "Please enter your data",
+    "loginForgotPassword": "Forgot password?",
+    "loginButton": "Sign in",
+    "loginForgotPasswordMessage": "Enter your credentials and we will send you a recast link",
+    "alreadyHaveAnAccount": "Already have an account?",
+    "loginResetPasswordMessage": "Change your password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "resetPassword": "Reset password",
     "Marketplaces": {
       "FlatRate": "Flat rate",
       "MarginError": "Margin of error",
@@ -44,7 +54,10 @@
       "Pagination": "Lines per page",
       "ClearFilters": "Clear filters",
       "Commission": "Commission",
-      "Required": "Required"
+      "Required": "Required",
+      "Email": "E-mail",
+      "Password": "Password",
+      "Send": "Send"
     },
     "AddNewRegister": {
       "AddNewRegister": "Add new register",
