@@ -1,81 +1,93 @@
 import {
   Box,
+  Button,
+  Collapse,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
-import { useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { ordersStore } from "../OrdersStore";
+import StoreSelect from "../../../components/StoreSelect";
+import DateSelect from "../../../components/DateSelect";
 
-const OrdersFilters = () => {
+const statusList = ["PENDING", "VERIFY", "PAID"];
+
+const OrdersFilters = ({ showFilters }: { showFilters: boolean }) => {
   const { t } = useTranslation();
+  const { setPage, filters, setFilters } = ordersStore();
 
-  const rows: any = [];
+  const handleApplyFilters = () => setPage(0);
 
-  const [status, setStatus] = useState("");
-  const [marketplace, setMarketplace] = useState("");
-
-  const handleMarketplaceChange = (event: any) => {
-    setMarketplace(event.target.value as string);
-  };
-
-  const handleStatusChange = (event: any) => {
-    setStatus(event.target.value as string);
+  const handleClearFilters = () => {
+    setFilters({
+      mktp_cod: "",
+      PEDS_STR_STAPAG: "",
+      date_start: "",
+      date_end: "",
+    });
+    setPage(0);
   };
 
   return (
-    <Box display={"flex"} flexWrap={"wrap"} gap={2}>
-      <TextField
-        id="order-start"
-        label={t("Filters.OrderStart")}
-        type="date"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <TextField
-        id="order-end"
-        label={t("Filters.OrderEnd")}
-        type="date"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel id="status-label">Status</InputLabel>
-        <Select
-          labelId="status-label"
-          id="status"
-          value={status}
-          label="Status"
-          onChange={handleStatusChange}
-        >
-          <MenuItem value=""></MenuItem>
-          <MenuItem value="Confirmed">{t("Filters.Confirmed")}</MenuItem>
-          <MenuItem value="Cancelled">{t("Filters.Cancelled")}</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="marketplace-label">{t("Common.Marketplace")}</InputLabel>
-        <Select
-          labelId="marketplace-label"
-          id="marketplace"
-          value={marketplace}
-          label={t("Common.Marketplace")}
-          onChange={handleMarketplaceChange}
-        >
-          <MenuItem value=""></MenuItem>
-          {rows
-            .filter((row: any) => row.marketplace)
-            .map((row: any) => (
-              <MenuItem key={row.index} value={row.marketplace}>
-                {row.marketplace}
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
+    <Box display="flex" flexWrap="wrap" gap={2}>
+      <Collapse in={showFilters} timeout="auto" unmountOnExit>
+        <Box display="flex" flexWrap="wrap" gap={2} alignItems="flex-end">
+          <StoreSelect
+            value={filters.mktp_cod}
+            onChange={(e) =>
+              setFilters({ ...filters, mktp_cod: e.target.value as number })
+            }
+          />
+
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="status-label">{t("Status")}</InputLabel>
+            <Select
+              labelId="status-label"
+              id="status"
+              value={filters.PEDS_STR_STAPAG}
+              label={t("Status")}
+              onChange={(e) =>
+                setFilters({
+                  ...filters,
+                  PEDS_STR_STAPAG: e.target.value as string,
+                })
+              }
+            >
+              {statusList.map((row) => (
+                <MenuItem key={row} value={row}>
+                  {t(`${row}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <DateSelect
+            label={t("Filters.OrderStart")}
+            value={filters.date_start}
+            onChange={(e) =>
+              setFilters({ ...filters, date_start: e.target.value })
+            }
+          />
+
+          <DateSelect
+            label={t("Filters.OrderEnd")}
+            value={filters.date_end}
+            onChange={(e) =>
+              setFilters({ ...filters, date_end: e.target.value })
+            }
+          />
+
+          <Button variant="contained" onClick={handleApplyFilters}>
+            {t("Apply")}
+          </Button>
+          <Button variant="text" onClick={handleClearFilters}>
+            {t("Common.ClearFilters")}
+          </Button>
+        </Box>
+      </Collapse>
     </Box>
   );
 };

@@ -89,7 +89,8 @@ function App() {
         slotProps={{
           snackbar: {
             anchorOrigin: { vertical: "top", horizontal: "right" },
-            autoHideDuration: 3000,
+            autoHideDuration: 5000,
+            className: "notification",
           },
         }}
       >

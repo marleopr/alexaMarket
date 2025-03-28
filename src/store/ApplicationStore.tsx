@@ -4,6 +4,10 @@ import {
   getMarketplacesService,
   MarketPlacesType,
 } from "../services/marketplaces/get-market-places";
+import {
+  getUsersService,
+  UsersFromSameCompanyType,
+} from "../services/user/get-users-service";
 
 type Store = {
   isAuthenticated: boolean;
@@ -23,13 +27,16 @@ type Store = {
   marketplaceList: MarketPlacesType[];
   getMarketplaces: () => void;
   marketplaceListLoading: boolean;
+
+  userList: UsersFromSameCompanyType[];
+  getUsers: () => void;
 };
 
 export const appStore = create<Store>()((set, get) => ({
   isAuthenticated: false,
   setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
 
-  menuIsOpen: "false",
+  menuIsOpen: "true",
   toggleMenu: () => {
     set({ menuIsOpen: get().menuIsOpen === "true" ? "false" : "true" });
   },
@@ -67,10 +74,21 @@ export const appStore = create<Store>()((set, get) => ({
       console.error("Error fetching marketplaces");
       return;
     }
-    console.log("marketplaces opts -> ", response.data.data);
     set({
       marketplaceList: response.data.data.records,
       marketplaceListLoading: false,
     });
+  },
+
+  userList: [],
+  getUsers: async () => {
+    const response = await getUsersService();
+
+    if (response.code === "error") {
+      console.error("Error fetching users");
+      return;
+    }
+
+    set({ userList: response.data.data });
   },
 }));

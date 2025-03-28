@@ -7,9 +7,11 @@ import { appStore } from "../../../store/ApplicationStore";
 import { useTranslation } from "react-i18next";
 import { removeAuthDataFromLocalStorage } from "../../../utils/local-storage-helper";
 import { LogoutRounded } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { colors } from "../../../theme";
 
 const Sidebar = () => {
-  const { menuIsOpen } = appStore();
+  const { menuIsOpen, toggleMenu } = appStore();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -20,36 +22,41 @@ const Sidebar = () => {
     window.location.reload();
   };
 
+  const menuIsExpanded = menuIsOpen === "true";
+
   return (
     <Bar expanded={menuIsOpen.toString()}>
-      <Box display="flex" gap={0.2} flexDirection="column">
-        {routesToAppearInSidebar.map((route) => (
-          <Button
-            key={route.path}
-            variant={isActive(route.path) ? "contained" : "text"}
-            onClick={() => {
-              navigate(route.path);
-              window.scrollTo(0, 0);
-            }}
-            sx={{
-              gap: menuIsOpen ? "8px" : "0",
-            }}
-            title={t(route.label)}
-            startIcon={route.icon}
-          >
-            <span className="menu-text">{t(route.label)}</span>
-          </Button>
-        ))}
+      <Box display="flex" flexDirection="column">
+        <Button onClick={() => toggleMenu()} style={{ marginBottom: "0.5rem" }}>
+          <MenuIcon />
+        </Button>
+
+        <Box display="flex" flexDirection="column" gap="0.2rem">
+          {routesToAppearInSidebar.map((route) => (
+            <MenuButton
+              menuIsExpanded={menuIsExpanded}
+              key={route.path}
+              isSelected={isActive(route.path)}
+              onClick={() => {
+                navigate(route.path);
+                window.scrollTo(0, 0);
+              }}
+            >
+              {route.icon}
+              <span className="menu-text">{t(route.label)}</span>
+            </MenuButton>
+          ))}
+        </Box>
       </Box>
 
-      <Button
-        variant="text"
+      <MenuButton
         onClick={handleLogout}
-        startIcon={<LogoutRounded />}
-        sx={{ mb: 2 }}
+        style={{ marginBottom: "2rem", border: "none" }}
+        menuIsExpanded={menuIsExpanded}
       >
-        <span className="menu-text"> {t("Logout")}</span>
-      </Button>
+        <LogoutRounded />
+        <span className="menu-text">{t("Logout")}</span>
+      </MenuButton>
     </Bar>
   );
 };
@@ -57,7 +64,6 @@ const Sidebar = () => {
 export default Sidebar;
 
 const Bar = styled.div<{ expanded: string }>`
-  width: ${(props) => (props.expanded === "true" ? "180px" : "68px")};
   background-color: #fff;
   transition: width 0.4s;
 
@@ -65,25 +71,54 @@ const Bar = styled.div<{ expanded: string }>`
   position: fixed;
   gap: 0.2rem;
   height: calc(100vh - ${HEADER_HEIGHT});
-  padding: ${(props) => (props.expanded === "true" ? "0 1rem" : "0 0.1rem")};
-
-  min-width: ${(props) => (props.expanded === "true" ? "180px" : "68px")};
-
-  .menu-text {
-    display: ${(props) => (props.expanded === "true" ? "inline" : "none")};
-  }
+  padding: ${(props) => (props.expanded === "true" ? "0" : "0 0.1rem")};
 
   justify-content: space-between;
   display: flex;
   flex-direction: column;
 
   @media (max-width: 500px) {
-    width: 16px;
-    min-width: 16px;
-    position: sticky;
-    padding: 0;
-    & > *:first-child {
-      display: none;
-    }
+    display: none;
   }
+
+  width: ${(props) => (props.expanded === "true" ? "150px" : "68px")};
+  padding: 4px;
+`;
+
+const MenuButton = styled.button<{
+  isSelected?: boolean;
+  menuIsExpanded?: boolean;
+}>`
+  gap: 0.5rem;
+  display: ${(props) => (props.menuIsExpanded ? "flex" : "")};
+  cursor: pointer;
+  height: 36px;
+  background-color: ${(props) =>
+    props.isSelected ? colors.green.light : "transparent"};
+
+  color: ${colors.green.main};
+
+  border-radius: 0.5rem;
+  text-align: center;
+
+  border: ${(props) =>
+    props.isSelected ? "none" : `0.5px solid ${colors.green.light}`};
+
+  align-items: center;
+
+  padding: ${(props) => (props.menuIsExpanded ? " 0 16px" : "0")};
+  &:hover {
+    background-color: ${colors.green.light};
+    color: ${colors.green.main};
+  }
+
+  .menu-text {
+    display: ${(props) => (props.menuIsExpanded ? "flex" : "none")};
+  }
+
+  & > svg {
+    font-size: ${(props) => (props.menuIsExpanded ? "1.2rem" : "1.4rem")};
+  }
+
+  transition: all 0.4s;
 `;

@@ -15,3 +15,7 @@ body {
   background-color: #fff;
   overflow-x: hidden;
 }
+
+.notification {
+  z-index: 999999999 !important;
+}

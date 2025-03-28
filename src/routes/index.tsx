@@ -12,15 +12,17 @@ import React from "react";
 import Dashboard from "../pages/Dashboard";
 import Stores from "../pages/Stores";
 import Orders from "../pages/Orders";
-// import Files from "../pages/Files";
-import Files from "../pages/Stores copy";
+import Files from "../pages/Files";
 import Layout from "../components/Layout";
-import AxiosInterceptorComponent from "../api/AxiosInterceptorComponent";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import { DashboardCustomize, Store } from "@mui/icons-material";
-import { GrOrderedList } from "react-icons/gr";
 import { TbFileDescription } from "react-icons/tb";
+import StorePayment from "../pages/StorePayment";
+import Shipping from "../pages/Shipping";
+import { MdAttachMoney } from "react-icons/md";
+import { BsBoxSeam } from "react-icons/bs";
+import { MdOutlineLocalShipping } from "react-icons/md";
 
 const RouteWithMenu = ({ element }: { element: React.ReactNode }) => {
   return (
@@ -44,16 +46,28 @@ export const routesToAppearInSidebar = [
     icon: <Store />,
   },
   {
-    path: PATHS.ORDERS,
-    element: <RouteWithMenu element={<Orders />} />,
-    label: "OrdersMenu",
-    icon: <GrOrderedList />,
+    path: PATHS.SHIPPING,
+    element: <RouteWithMenu element={<Shipping />} />,
+    label: "ShippingMenu",
+    icon: <MdOutlineLocalShipping />,
   },
   {
     path: PATHS.FILES,
     element: <RouteWithMenu element={<Files />} />,
     label: "FilesMenu",
     icon: <TbFileDescription />,
+  },
+  {
+    path: PATHS.ORDERS,
+    element: <RouteWithMenu element={<Orders />} />,
+    label: "OrdersMenu",
+    icon: <BsBoxSeam />,
+  },
+  {
+    path: PATHS.STORE_PAYMENT,
+    element: <RouteWithMenu element={<StorePayment />} />,
+    label: "StorePaymentMenu",
+    icon: <MdAttachMoney />,
   },
 ];
 
@@ -84,7 +98,6 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Router>
-      <AxiosInterceptorComponent />
       <Routes>
         {routes.map((route, index) => {
           return (

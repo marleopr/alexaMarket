@@ -3,11 +3,12 @@ import { ptBR } from "@mui/material/locale";
 
 export const colors = {
   green: {
+    light: "rgb(224, 242, 241)",
     main: "rgb(0, 150, 136)",
   },
-  red:{
-    error: "#d32f2f"
-  }
+  red: {
+    error: "#d32f2f",
+  },
 };
 
 export const theme = createTheme(

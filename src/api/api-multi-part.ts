@@ -4,7 +4,7 @@ import { getTokenFromLocalStorage } from "../utils/local-storage-helper";
 
 const API_MULTI_PART = axios.create({
   baseURL: BASE_URL,
-  timeout: 100000,
+  timeout: 60000,
   headers: {
     "Content-Type": "multipart/form-data",
   },

@@ -89,16 +89,13 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
   const [errors, setErrors] = useState({
     pMKTP_NOM_NAM: false,
     pMKTP_COD_MKT: false,
-    pMKTP_DAT_INIVIG: false,
-    pMKTP_DAT_FIMVIG: false,
   });
 
   const validateInputs = () => {
     let errs: any = {
       pMKTP_NOM_NAM: false,
       pMKTP_COD_MKT: false,
-      pMKTP_DAT_INIVIG: false,
-      pMKTP_DAT_FIMVIG: false,
+    
     };
 
     if (!register.pMKTP_NOM_NAM) {
@@ -107,19 +104,13 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
     if (register.pMKTP_COD_MKT === 0) {
       errs.pMKTP_COD_MKT = true;
     }
-    if (!register.pMKTP_DAT_INIVIG) {
-      errs.pMKTP_DAT_INIVIG = true;
-    }
-    if (!register.pMKTP_DAT_FIMVIG) {
-      errs.pMKTP_DAT_FIMVIG = true;
-    }
 
     setErrors((prev) => ({ ...prev, ...errs }));
 
     if (Object.values(errs).some((err) => err)) {
       return;
     }
-    console.log(errs);
+    console.error(errs);
     handleSubmit();
   };
 
@@ -129,7 +120,7 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
         {t("Common.Store")} - {register.pMKTP_COD}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{t("AddNewRegister.Dialog")}</DialogContentText>
+        <DialogContentText>{t("EditNewRegister")}</DialogContentText>
 
         <Box
           component="form"
@@ -158,19 +149,6 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
               }
             />
           </FormControl>
-          <FormControl>
-            <TextField
-              margin="dense"
-              name="pMKTP_VLR_PERCEN"
-              value={register.pMKTP_VLR_PERCEN}
-              label={t("Common.Commission")}
-              type="number"
-              fullWidth
-              variant="outlined"
-              onChange={handleChange}
-            />
-          </FormControl>
-
           <FormControl sx={{ minWidth: "100%" }} margin="dense">
             <InputLabel id="marketplace-label">
               {t("Common.Marketplace")}
@@ -205,64 +183,6 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
             </Typography>
           </FormControl>
         </Box>
-
-        <TextField
-          margin="dense"
-          name="pMKTP_VAL_FLTRAT"
-          value={register.pMKTP_VAL_FLTRAT}
-          label={t("Marketplaces.FlatRate")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="pMKTP_VAL_MAR"
-          value={register.pMKTP_VAL_MAR}
-          label={t("Marketplaces.MarginError")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-
-        <TextField
-          margin="dense"
-          name="pMKTP_INT_DAYPAY"
-          value={register.pMKTP_INT_DAYPAY}
-          label={t("Marketplaces.DaysForPayment")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          value={register.pMKTP_DAT_INIVIG}
-          label={t("Marketplaces.StartOfTerm")}
-          type="date"
-          name="pMKTP_DAT_INIVIG"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          variant="outlined"
-          onChange={handleChange}
-          error={errors.pMKTP_DAT_INIVIG}
-          helperText={errors.pMKTP_DAT_INIVIG ? t("Common.Required") : ""}
-        />
-        <TextField
-          value={register.pMKTP_DAT_FIMVIG}
-          margin="dense"
-          name="pMKTP_DAT_FIMVIG"
-          label={t("Marketplaces.EndOfTerm")}
-          type="date"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          variant="outlined"
-          onChange={handleChange}
-          error={errors.pMKTP_DAT_FIMVIG}
-          helperText={errors.pMKTP_DAT_FIMVIG ? t("Common.Required") : ""}
-        />
       </DialogContent>
       <DialogActions>
         <Button
@@ -279,7 +199,7 @@ const EditStoreModal: React.FC<EditRegisterModalProps> = ({
           color="primary"
           disabled={editStoreLoading}
         >
-          {t("Buttons.Add")}
+          {t("Buttons.Save")}
         </Button>
       </DialogActions>
     </Dialog>

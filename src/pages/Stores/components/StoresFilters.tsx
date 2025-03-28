@@ -1,20 +1,9 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
-import { appStore } from "../../../store/ApplicationStore";
-import { MarketPlacesType } from "../../../services/marketplaces/get-market-places";
+import { Box, Button, Collapse, FormControl, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { storesStore } from "../StoresStore";
+import MarketplaceSelect from "../../../components/MarketplaceSelect";
 
 const StoresFilters = ({ showFilters }: { showFilters: boolean }) => {
-  const { marketplaceList } = appStore();
   const { t } = useTranslation();
   const { setPage, filters, setFilters } = storesStore();
 
@@ -29,29 +18,13 @@ const StoresFilters = ({ showFilters }: { showFilters: boolean }) => {
     <Box display="flex" flexWrap="wrap" gap={2}>
       <Collapse in={showFilters} timeout="auto" unmountOnExit>
         <Box display="flex" flexWrap="wrap" gap={2}>
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="marketplace-label">
-              {t("Common.Marketplace")}
-            </InputLabel>
-            <Select
-              labelId="marketplace-label"
-              id="marketplace"
-              value={filters.marketplace}
-              label={t("Common.Marketplace")}
-              onChange={(e) =>
-                setFilters({
-                  ...filters,
-                  marketplace: e.target.value as number,
-                })
-              }
-            >
-              {marketplaceList.map((row: MarketPlacesType) => (
-                <MenuItem key={row.Codigo} value={row.Codigo}>
-                  {row.Nome}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <MarketplaceSelect
+            value={filters.marketplace}
+            onChange={(e) =>
+              setFilters({ ...filters, marketplace: e.target.value as number })
+            }
+          />
+
           <FormControl sx={{ minWidth: 200 }}>
             <TextField
               label={t("Common.Name")}

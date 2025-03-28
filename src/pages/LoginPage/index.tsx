@@ -16,6 +16,7 @@ import {
 import { loginService } from "../../services/login/login-service";
 import { getUserInfoService } from "../../services/user/get-user-info-service";
 import {
+  saveRefreshTokenInLocalStorage,
   saveTokenInLocalStorage,
   saveUserIdInLocalStorage,
 } from "../../utils/local-storage-helper";
@@ -25,8 +26,8 @@ const LoginPage: FC = () => {
   const notifications = useNotifications();
   const { t } = useTranslation();
 
-  const [userError, setUserError] = useState(false);
-  const [userErrorMessage, setUserErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
@@ -37,7 +38,8 @@ const LoginPage: FC = () => {
     if (isAuthenticated) {
       navigate(PATHS.DASHBOARD);
     }
-  }, [isAuthenticated, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,55 +49,37 @@ const LoginPage: FC = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await loginService({
-        username: data.get("username") as string,
+      const res = await loginService({
+        login: data.get("email") as string,
         password: data.get("password") as string,
+        account: data.get("email") as string,
       });
 
-      if (response.code === "error") {
-        return notifications.show(
-          response.error?.message || "Erro ao realizar login",
-          {
-            severity: "error",
-            autoHideDuration: 3000,
-          }
-        );
-      }
-
-      const { token, companyId } = response.data;
-
-      saveTokenInLocalStorage(token);
-
-      if (companyId) {
-        saveUserIdInLocalStorage(companyId);
-
-        const loggedUserInfo = await getUserInfoService({ id: companyId });
-
-        if (loggedUserInfo.code === "error") {
-          return notifications.show("Erro ao buscar informações do usuário", {
-            severity: "error",
-            autoHideDuration: 3000,
-          });
-        }
-
-        setLoggedUser({
-          username: loggedUserInfo.data.username, // Use the username returned by the backend
-          role: "user", // Assuming it's a regular user
-          name: loggedUserInfo.data.name, // Name from the user info response
-          // You can omit email and other details if not needed
-        });
-      } else {
-        setLoggedUser({
-          username: "admin", // Admin username, could be a fixed value
-          role: "admin", // Role for admin
-          // You can exclude 'name' or any other data if not necessary
+      if (res.code === "error") {
+        return notifications.show("Usuário ou senha inválidos", {
+          severity: "error",
+          autoHideDuration: 3000,
         });
       }
 
+      saveUserIdInLocalStorage(res.data.id);
+      saveRefreshTokenInLocalStorage(res.data.refreshToken);
+      saveTokenInLocalStorage(res.data.accessToken);
+
+      const loggedUserInfo = await getUserInfoService({ id: res.data.id });
+
+      if (loggedUserInfo.code === "error") {
+        return notifications.show("Erro ao buscar informações do usuário", {
+          severity: "error",
+          autoHideDuration: 3000,
+        });
+      }
+
+      setLoggedUser(loggedUserInfo.data);
       setIsAuthenticated(true);
       navigate(PATHS.DASHBOARD);
     } catch (error) {
-      notifications.show("Erro inesperado ao realizar login", {
+      notifications.show("Erro ao realizar login", {
         severity: "error",
         autoHideDuration: 3000,
       });
@@ -104,18 +88,18 @@ const LoginPage: FC = () => {
   };
 
   const validateInputs = () => {
-    const user = document.getElementById("username") as HTMLInputElement;
+    const email = document.getElementById("email") as HTMLInputElement;
     const password = document.getElementById("password") as HTMLInputElement;
 
     let isValid = true;
 
-    if (!user.value || user.value.trim().length === 0) {
-      setUserError(true);
-      setUserErrorMessage("Usuário inválido");
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+      setEmailError(true);
+      setEmailErrorMessage("Email inválido");
       isValid = false;
     } else {
-      setUserError(false);
-      setUserErrorMessage("");
+      setEmailError(false);
+      setEmailErrorMessage("");
     }
 
     if (!password.value) {
@@ -147,7 +131,7 @@ const LoginPage: FC = () => {
               fontSize: "clamp(2rem, 5vw, 2.5rem)",
             }}
           >
-            Offer
+            $ave
           </Typography>
           <Typography
             variant="body1"
@@ -166,19 +150,20 @@ const LoginPage: FC = () => {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="user">{t("Common.User")}</FormLabel>
+              <FormLabel htmlFor="email">{t("Common.Email")}</FormLabel>
               <TextField
-                error={userError}
-                helperText={userErrorMessage}
-                id="username"
-                type="text"
-                name="username"
-                placeholder="Nome de usuário"
-                autoComplete="username"
+                error={emailError}
+                helperText={emailErrorMessage}
+                id="email"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                autoComplete="email"
+                autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={userError ? "error" : "primary"}
+                color={emailError ? "error" : "primary"}
               />
             </FormControl>
             <FormControl>
@@ -197,7 +182,13 @@ const LoginPage: FC = () => {
                 color={passwordError ? "error" : "primary"}
               />
             </FormControl>
-            <Button type="submit" fullWidth variant="contained" size="large">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              onClick={validateInputs}
+            >
               {t("loginButton")}
             </Button>
             <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>

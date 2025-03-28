@@ -1,6 +1,3 @@
-# Projeto Alexa Market [EM CONSTRUÇÃO]
-
-
 # React + TypeScript + Vite
 
 # How to run in docker:

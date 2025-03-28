@@ -4,6 +4,8 @@ export const PATHS = {
   STORES: `/stores`,
   ORDERS: `/orders`,
   FILES: `/files`,
+  STORE_PAYMENT: `/store-payment`,
   FORGOT_PASSWORD: `/forgot-password`,
   RESET_PASSWORD: `/reset-password/*`,
+  SHIPPING: `/shipping`,
 };

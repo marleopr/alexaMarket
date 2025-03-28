@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import StoresTable from "./components/StoresTable";
+import StoresTable from "./components/Table/StoresTable";
 import { useTranslation } from "react-i18next";
 import { appStore } from "../../store/ApplicationStore";
 import { useEffect } from "react";

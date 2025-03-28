@@ -31,7 +31,6 @@ const ForgotPasswordPage: FC = () => {
     if (isAuthenticated) {
       navigate(PATHS.DASHBOARD);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

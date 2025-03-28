@@ -7,31 +7,24 @@ import { appStore } from "../../store/ApplicationStore";
 
 const Container = styled(Box)`
   display: flex;
-  height: calc(100vh - ${HEADER_HEIGHT});
+  height: calc(100dvh - ${HEADER_HEIGHT});
 `;
 
 const MiddleColumn = styled(Box)<{ open: boolean }>`
-  flex: 1;
   background-color: #eef2f6;
   height: fit-content;
   min-height: calc(100vh - ${HEADER_HEIGHT});
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
   padding: 1.5rem;
-  margin-left: ${(props) => (props.open ? "212px" : "70px")};
+  margin-left: ${(props) => (props.open ? "150px" : "70px")};
   transition: margin 0.4s;
+  width: 100%;
+  overflow: hidden;
 
   @media (max-width: 600px) {
     margin-left: 0px;
   }
-`;
-
-const LastColumn = styled(Box)`
-  width: 16px;
-  background-color: #fff;
-  position: sticky;
-  top: 0;
-  height: calc(100vh - ${HEADER_HEIGHT});
 `;
 
 type LayoutProps = {
@@ -44,7 +37,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const open = menuIsOpen === "true";
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100dvh",
+      }}
+    >
       <Header />
       <Container>
         <Sidebar />
@@ -53,9 +52,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {children}
           </Box>
         </MiddleColumn>
-        <LastColumn />
       </Container>
-    </>
+    </div>
   );
 };
 

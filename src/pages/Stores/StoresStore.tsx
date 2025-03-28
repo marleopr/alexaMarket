@@ -43,6 +43,8 @@ type Store = {
 
   editStore: (store: EditStorePayload) => Promise<string>;
   editStoreLoading: boolean;
+
+  findMarketPlaceName: (mktp_cod: string | number) => string;
 };
 
 export const storesStore = create<Store>()((set, get) => ({
@@ -88,7 +90,6 @@ export const storesStore = create<Store>()((set, get) => ({
       console.error("Error fetching marketplaces");
       return;
     }
-    console.log(" response.data.data.records -> ", response.data.data.records);
     set({
       storeList: response.data.data.records,
       storeListLoading: false,
@@ -162,5 +163,13 @@ export const storesStore = create<Store>()((set, get) => ({
       return res.error as unknown as string;
     }
     return "";
+  },
+
+  findMarketPlaceName: (mktp_cod) => {
+    const marketplace = get().storeList.find(
+      (marketplace) => Number(marketplace.MKTP_COD) === Number(mktp_cod)
+    );
+
+    return marketplace?.MKTP_NOM_NAM || "";
   },
 }));

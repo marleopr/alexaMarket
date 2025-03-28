@@ -93,16 +93,12 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
   const [errors, setErrors] = useState({
     pMKTP_NOM_NAM: false,
     pMKTP_COD_MKT: false,
-    pMKTP_DAT_INIVIG: false,
-    pMKTP_DAT_FIMVIG: false,
   });
 
   const validateInputs = () => {
     const errs: { [key: string]: boolean } = {
       pMKTP_NOM_NAM: false,
       pMKTP_COD_MKT: false,
-      pMKTP_DAT_INIVIG: false,
-      pMKTP_DAT_FIMVIG: false,
     };
 
     if (!newRegister.pMKTP_NOM_NAM) {
@@ -111,19 +107,13 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
     if (newRegister.pMKTP_COD_MKT === 0) {
       errs.pMKTP_COD_MKT = true;
     }
-    if (!newRegister.pMKTP_DAT_INIVIG) {
-      errs.pMKTP_DAT_INIVIG = true;
-    }
-    if (!newRegister.pMKTP_DAT_FIMVIG) {
-      errs.pMKTP_DAT_FIMVIG = true;
-    }
 
     setErrors((prev) => ({ ...prev, ...errs }));
 
     if (Object.values(errs).some((err) => err)) {
       return;
     }
-    console.log(errs);
+    console.error(errs);
     handleSubmit();
   };
 
@@ -158,18 +148,6 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
               helperText={
                 errors.pMKTP_NOM_NAM ? t("Common.Required") : undefined
               }
-            />
-          </FormControl>
-          <FormControl>
-            <TextField
-              margin="dense"
-              name="pMKTP_VLR_PERCEN"
-              value={newRegister.pMKTP_VLR_PERCEN}
-              label={t("Common.Commission")}
-              type="number"
-              fullWidth
-              variant="outlined"
-              onChange={handleChange}
             />
           </FormControl>
 
@@ -207,64 +185,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
             </Typography>
           </FormControl>
         </Box>
-
-        <TextField
-          margin="dense"
-          name="pMKTP_VAL_FLTRAT"
-          value={newRegister.pMKTP_VAL_FLTRAT}
-          label={t("Marketplaces.FlatRate")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="pMKTP_VAL_MAR"
-          value={newRegister.pMKTP_VAL_MAR}
-          label={t("Marketplaces.MarginError")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-
-        <TextField
-          margin="dense"
-          name="pMKTP_INT_DAYPAY"
-          value={newRegister.pMKTP_INT_DAYPAY}
-          label={t("Marketplaces.DaysForPayment")}
-          type="number"
-          fullWidth
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          value={newRegister.pMKTP_DAT_INIVIG}
-          label={t("Marketplaces.StartOfTerm")}
-          type="date"
-          name="pMKTP_DAT_INIVIG"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          variant="outlined"
-          onChange={handleChange}
-          error={errors.pMKTP_DAT_INIVIG}
-          helperText={errors.pMKTP_DAT_INIVIG ? t("Common.Required") : ""}
-        />
-        <TextField
-          value={newRegister.pMKTP_DAT_FIMVIG}
-          margin="dense"
-          name="pMKTP_DAT_FIMVIG"
-          label={t("Marketplaces.EndOfTerm")}
-          type="date"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          variant="outlined"
-          onChange={handleChange}
-          error={errors.pMKTP_DAT_FIMVIG}
-          helperText={errors.pMKTP_DAT_FIMVIG ? t("Common.Required") : ""}
-        />
+  
       </DialogContent>
       <DialogActions>
         <Button
@@ -281,7 +202,7 @@ const NewRegisterModal: React.FC<NewRegisterModalProps> = ({
           color="primary"
           disabled={createStoreLoading}
         >
-          {t("Buttons.Add")}
+          {t("Buttons.Save")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -6,7 +6,6 @@ interface GetContractTypeListParams {
 }
 
 interface GetContractTypeListResponse {
-  username: string | undefined;
   globalAccountKey: string;
   productKey: string;
   account: string;
